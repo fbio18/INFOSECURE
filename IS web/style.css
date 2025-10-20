@@ -27,15 +27,83 @@
   padding-left: 70px;
 }
 
-#banner{
-  max-width: 30%;
-  float: inline-end;
+.banner{
+background-image: url(v617batch2-bb-01-technology.jpg);
   
+
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;  
+padding-bottom: 50px;
+
 }
-#bannerRow{
-  
-  max-width: 90%;
+
+
+.banner--content{
+
+ width: 95%;
+ margin-inline: auto;
+ padding-block: 10px;
+ display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: center;
+overflow: hidden;
+
 }
+@media (min-width:768px){
+  .banner--content{
+    flex-direction: row;
+  }
+}
+.banner--info{
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+@media(min-width:768px){
+  .banner--info{
+    width: 45%;
+    text-align: start;
+  }
+}
+.banner--info h1{
+ color: aliceblue;
+ font-weight: 900;
+ font-size: 35px;
+}
+
+.banner--animation{
+  position: relative;
+
+}
+.banner--bitfort{
+  width: 350px;
+  filter: drop-shadow(0 1mm 3mm rgb(34, 47, 102));
+}
+@media(min-width:768px){
+  .banner--bitfort{
+    width: 450px;
+    
+  }
+}
+
+@media(min-width:992px){
+  .banner--bitfort{
+    width: 550px;
+    
+  }
+}
+
+body{
+color: #193666;
+}
+
+
+
 
 #cards{
   max-width: 95%;
@@ -51,6 +119,6 @@
   padding-right: 90px;
 }
 .container-text-center{
-  background-color: rgb(94, 222, 226);
+  background-color: #34839b
   
 }
