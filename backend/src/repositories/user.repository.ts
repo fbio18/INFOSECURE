@@ -1,17 +1,18 @@
 import AppDataSource from "../db";
 import User from "../entities/User";
-import { CustomError } from "../services/errorMessages";
+import { MissingData, NotFound } from "../services/errorMessages";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
     async createUser(userData: Partial<User>, hashedPassword: string) {
-        if (!userData.email || !userData.password) throw new CustomError("not-found");
+        if (!userData.email || !hashedPassword || !userData.username) throw new MissingData();
 
         await this
         .createQueryBuilder("product")
         .insert()
         .values({
             email: userData.email,
-            password: hashedPassword
+            password: hashedPassword,
+            username: userData.username
         })
         .execute();
 
@@ -20,7 +21,7 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .orderBy("user_id", "DESC")
         .getOne();
 
-        if (!returnedUser) throw new Error();
+        if (!returnedUser) throw new NotFound("user");
 
         return returnedUser;
     },
