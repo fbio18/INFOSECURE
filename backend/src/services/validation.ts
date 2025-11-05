@@ -13,7 +13,7 @@ const messages = {
     integerId: "El ID debe ser un número entero",
     nonNumberCharacter: "El string enviado solo debe contener números",
     invalidRole: "El rol ingresado no es válido",
-    maxRatingExceeded: "El valor de rating no debe ser mayor a 5"
+    maxRatingExceeded: "El valor de rating no debe ser mayor a 5",
 }
 
 export function validateBody(body: object) {
@@ -91,4 +91,28 @@ export function validateProductData(productData: unknown) {
     type productData = v.InferOutput<typeof productSchema>;
 
     return v.parse(productSchema, productData);
+}
+
+export function validateEmployeeData(employeeData: unknown) {
+    const minSalaryValue = 317800;
+
+    const employeeSchema = v.object({
+        dni: v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+            v.length(8)
+        ),
+        surnames: v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty)
+        ),
+        salary: v.pipe(
+            v.number(messages.number),
+            v.minValue(minSalaryValue, `El valor del salario no puede ser menor a ${minSalaryValue}`)
+        )
+    })
+
+    type employeeData = v.InferOutput<typeof employeeSchema>;
+
+    return v.parse(employeeSchema, employeeData);
 }
