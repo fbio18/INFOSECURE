@@ -7,3 +7,5 @@ router.post("/employee", createEmployeeController);
 router.get("/employee", readEmployeeController);
 router.put("/employee", updateEmployeeController);
 router.delete("/employee", deleteEmployeeController);
+
+export default router;

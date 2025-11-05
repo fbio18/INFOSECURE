@@ -7,3 +7,5 @@ router.post("/user", createUserController);
 router.get("/user", readUserController);
 router.put("/user", updateUserController);
 router.delete("/user", deleteUserController);
+
+export default router;

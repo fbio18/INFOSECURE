@@ -7,3 +7,5 @@ router.post("/product", createProductController);
 router.get("/product", readProductController);
 router.put("/product", updateProductController);
 router.delete("/product", deleteProductController);
+
+export default router;

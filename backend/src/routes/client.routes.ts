@@ -7,3 +7,5 @@ router.post("/client", createClientController);
 router.get("/client", readClientController);
 router.put("/client", updateClientController);
 router.delete("/client", deleteClientController);
+
+export default router;

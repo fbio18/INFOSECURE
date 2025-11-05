@@ -7,3 +7,5 @@ router.post("/invoice", createInvoiceController);
 router.get("/invoice", readInvoiceController);
 router.put("/invoice", updateInvoiceController);
 router.delete("/invoice", deleteInvoiceController);
+
+export default router;
