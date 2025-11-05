@@ -8,11 +8,12 @@ async function main(){
     try {
         await AppDataSource.initialize()
         await preloadData();
-        console.log("Database intialized");
         app.listen(PORT || 4000);
         console.log("Server up on port ", PORT);
     } catch (error) {
         console.error(error);
+        app.listen(PORT || 4000);
+        console.log("Server up on port ", PORT);
     }
 }
 
