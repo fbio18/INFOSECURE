@@ -76,3 +76,19 @@ export function validateClientData(clientData: unknown) {
 
     return v.parse(clientSchema, clientData);
 }
+
+const productSchema = v.object({
+    name: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty)
+    ),
+    price: v.pipe(
+        v.number()
+    )
+})
+
+export function validateProductData(productData: unknown) {
+    type productData = v.InferOutput<typeof productSchema>;
+
+    return v.parse(productSchema, productData);
+}
