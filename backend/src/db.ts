@@ -11,7 +11,6 @@ import Invoice_Product from "./entities/Invoice_product";
 import Role from "./entities/Role";
 import Nationality from "./entities/Nationality";
 import Employee from "./entities/Employee";
-import Receptor_type from "./entities/Receptor_type";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -24,7 +23,7 @@ export const AppDataSource = new DataSource({
     password: DB_PASSWORD,
     port: (<number>DB_PORT),
     database: DB_NAME,
-    entities: [User, Cart, Client, Product, Invoice, Invoice_type, Role, Nationality, Employee, Invoice_Product, Receptor_type, Cart_Product],
+    entities: [User, Cart, Client, Product, Invoice, Invoice_type, Role, Nationality, Employee, Invoice_Product, Cart_Product],
     logging: true,
     synchronize: true,
     dropSchema: true
