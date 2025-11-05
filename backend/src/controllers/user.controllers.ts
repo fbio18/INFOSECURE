@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { createUserService, readUserService, readsAllUserService, updateUserService, deleteUserService } from "../services/user.services";
 import { validateBody } from "../services/validation";
+import { InvalidBody } from "../services/errorMessages";
 
 export async function createUserController(req: Request, res: Response) {
     try {
-        if (!validateBody(req.body)) throw new Error();
+        if (!validateBody(req.body)) throw new InvalidBody();
 
-        const newUser = createUserService(req.body);
+        const newUser = await createUserService(req.body);
 
         console.log("User created");
         res.send(newUser);
