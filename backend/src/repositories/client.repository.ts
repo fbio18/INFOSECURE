@@ -1,14 +1,17 @@
 import AppDataSource from "../db";
 import Client from "../entities/Client";
+import { MissingData, NotFound } from "../services/errorMessages";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
-    async createClient(businessName: string, phoneNumber: string) {
+    async createClient(clientData: Partial<Client>) {
+        if (!clientData.business_name || !clientData.phone_number) throw new MissingData();
+
         await this
         .createQueryBuilder("client")
         .insert()
         .values({
-            business_name: businessName,
-            phone_number: phoneNumber 
+            business_name: clientData.business_name,
+            phone_number: clientData.phone_number
         })
         .execute();
 
@@ -17,7 +20,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .orderBy("client_id", "DESC")
         .getOne();
 
-        if (!returnedClient) throw new Error();
+        if (!returnedClient) throw new NotFound("client");
 
         return returnedClient;
     },
