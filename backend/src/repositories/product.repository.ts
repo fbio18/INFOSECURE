@@ -1,14 +1,17 @@
 import AppDataSource from "../db";
 import Product from "../entities/Product";
+import { MissingData } from "../services/errorMessages";
 
 const ProductRepository = AppDataSource.getRepository(Product).extend({
-    async createProduct(name: string, price: number) {
+    async createProduct(productData: Partial<Product>): Promise<Product> {
+        if (!productData.name || !productData.price) throw new MissingData();
+
         await this
         .createQueryBuilder("product")
         .insert()
         .values({
-            name: name,
-            price: price
+            name: productData.name,
+            price: productData.price
         })
         .execute();
 
