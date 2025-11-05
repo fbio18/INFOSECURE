@@ -1,4 +1,4 @@
-export function addErrorMessage(errorType: string): { message: string, statusCode: number } {
+function addErrorMessage(errorType: string): { message: string, statusCode: number } {
     switch (errorType) {
         case "invalid-id":
             return { message: "Por favor ingrese un id válido", statusCode: 400 };
@@ -36,17 +36,7 @@ export function addErrorMessage(errorType: string): { message: string, statusCod
 }
 
 export class CustomError extends Error {
-    constructor(
-        public errorCode:
-                "invalid-number-id" |
-                "invalid-string-id" |
-                "not-found" |
-                "empty-body" |
-                "already-exists" |
-                "access-denied" |
-                "access-unauthorized" |
-                "invalid-data"
-        , public statusCode?: number) {
+    constructor(public errorCode: string, public statusCode: number) {
 
         if (statusCode) {
             if (statusCode < 100 || statusCode > 600) {
@@ -68,5 +58,66 @@ export class CustomError extends Error {
     }
 }
 
+export class NotFound extends Error {
+    constructor(
+        public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee",
+        private statusCode?: number
+    ) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+
+        this.name = "NotFound"
+        this.message = `El dato ${entity} no fue encontrado`;
+        this.statusCode = 404;
+    }
+}
+
+export class InvalidId extends Error {
+    constructor(public idType: "number" | "string", private statusCode?: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+
+        this.name = "InvalidId";
+        this.message = `La id de tipo ${idType} utilizada no es válida`;
+        this.statusCode = 400;
+    }
+}
+
+export class InvalidBody extends Error {
+    constructor(private statusCode?: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+
+        this.name = "InvalidBody";
+        this.message = "El body está vacío o no cumple con los datos necesarios";
+        this.statusCode = 400;
+    }
+}
 
 
+export class InvalidData extends Error {
+    constructor(private statusCode?: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+
+        this.name = "InvalidData";
+        this.message = "El formato de los datos es incorrecto";
+        this.statusCode = 400;
+    }
+}
+
+export class MissingData extends Error {
+    constructor(private statusCode?: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+
+        this.name = "MissingData";
+        this.message = "Faltan uno o más campos";
+        this.statusCode = 400;
+    }
+}
