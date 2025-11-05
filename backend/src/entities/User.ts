@@ -1,7 +1,6 @@
-import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
 import Employee from "./Employee";
 import Client from "./Client";
-import Cart from "./Cart";
 
 @Entity()
 export default class User extends BaseEntity {
@@ -9,12 +8,15 @@ export default class User extends BaseEntity {
     id: number;
 
     @Column()
+    username: string;
+
+    @Column()
     email: string;
 
-    @Column()
+    @Column({ select: false })
     password: string;
 
-    @Column()
+    @Column({ default: 0 })
     last_time_spend_on_page: number;
 
     @OneToOne(() => Employee)
@@ -25,7 +27,4 @@ export default class User extends BaseEntity {
     @JoinColumn()
     client: Client;
 
-    @ManyToMany(() => Cart)
-    @JoinTable()
-    carts: Cart[];
 }
