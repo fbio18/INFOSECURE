@@ -14,7 +14,7 @@ export default class Cart extends BaseEntity {
     last_updated: Date;
 
     @ManyToOne(() => Client, (client) => client.carts)
-    user: Client;
+    client: Client;
 
     @OneToMany(() => Cart_Product, (cart_product) => cart_product.cart)
     cart_products: Cart_Product[];
