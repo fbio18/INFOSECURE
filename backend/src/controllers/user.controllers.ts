@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createUserService, readUserService, readsAllUsersService, updateUserService, deleteUserService } from "../services/user.services";
 import { validateBody } from "../services/validation";
-import { InvalidBody, MissingData } from "../services/errorMessages";
+import { createErrorResponse, InvalidBody, MissingData } from "../services/errorMessages";
 
 export async function createUserController(req: Request, res: Response) {
     try {
@@ -13,6 +13,7 @@ export async function createUserController(req: Request, res: Response) {
         res.send(newUser);
     } catch (error) {
         console.error(error);
+        res.send(createErrorResponse(error));
     }
 }
 
