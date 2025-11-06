@@ -6,11 +6,12 @@ import { SALT_ROUNDS } from "../config";
 import { InvalidData, InvalidId } from "./errorMessages";
 
 export async function createUserService(userData: Partial<User>) {
-    if (!validateUserData(userData)) throw new InvalidData();
+    //if (!validateUserData(userData)) throw new InvalidData();
+    const newUser = validateUserData(userData);
 
     const hashedPassword = await bcrypt.hash(userData.password as string, SALT_ROUNDS)
 
-    return await UserRepository.createUser(userData, hashedPassword);
+    return await UserRepository.createUser(newUser, hashedPassword);
 }
 
 export async function readUserService(userId: number): Promise<User> {
