@@ -60,7 +60,7 @@ export class CustomError extends Error {
 
 export class NotFound extends Error {
     constructor(
-        public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee",
+        public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee" | "nationality",
         private statusCode?: number
     ) {
         super();
