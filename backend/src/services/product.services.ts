@@ -1,8 +1,12 @@
 import Product from "../entities/Product"; 
 import ProductRepository from "../repositories/product.repository";
+import { InvalidData } from "./errorMessages";
+import { validateProductData } from "./validation";
 
-export async function createProductService() {
-    return await ProductRepository.createProduct();
+export async function createProductService(productData: Partial<Product>): Promise<Product> {
+    if (!validateProductData(productData)) throw new InvalidData();
+
+    return await ProductRepository.createProduct(productData);
 }
 
 export async function readProductService(productId: number): Promise<Product> {
