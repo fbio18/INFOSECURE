@@ -5,7 +5,7 @@ import Client from "./Client";
 @Entity()
 export default class User extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    user_id: number;
 
     @Column()
     username: string;
