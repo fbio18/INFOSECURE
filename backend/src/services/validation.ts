@@ -154,3 +154,17 @@ export type EmployeeValidated = v.InferOutput<typeof employeeSchema>;
 export function validateEmployeeData(employeeData: unknown) {
     return v.parse(employeeSchema, employeeData);
 }
+
+const cartSchema = v.object({
+    client: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
+    )
+})
+
+export type CartValidated = v.InferOutput<typeof cartSchema>;
+
+export function validateCartData(cartData: unknown) {
+    return v.parse(cartSchema, cartData);
+}
