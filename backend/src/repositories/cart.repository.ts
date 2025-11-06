@@ -1,12 +1,18 @@
 import AppDataSource from "../db";
 import Cart from "../entities/Cart";
+import { assignCartRelation, readClientService } from "../services/client.services";
+import { NotFound } from "../services/errorMessages";
+import { CartValidated } from "../services/validation";
 
 const CartRepository = AppDataSource.getRepository(Cart).extend({
-    async createCart(): Promise<Cart> {
+    async createCart(cartData: CartValidated): Promise<Cart> {
+        const client = await readClientService(cartData.client);
         await this
         .createQueryBuilder("cart")
         .insert()
-        .values({})
+        .values({
+            client: client
+        })
         .execute();
 
         const returnedCart = await this
@@ -14,7 +20,9 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
         .orderBy("cart.cart_id", "DESC")
         .getOne();
 
-        if (!returnedCart) throw new Error();
+        if (!returnedCart) throw new NotFound("cart");
+
+        await assignCartRelation(returnedCart.cart_id, cartData.client);
 
         return returnedCart;
     },
