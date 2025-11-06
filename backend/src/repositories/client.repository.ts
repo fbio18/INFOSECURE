@@ -1,17 +1,14 @@
 import AppDataSource from "../db";
 import Client from "../entities/Client";
-import { MissingData, NotFound } from "../services/errorMessages";
+import { NotFound } from "../services/errorMessages";
 import { assignClientRelationService, readUserService } from "../services/user.services";
+import { ClientValidated } from "../services/validation";
 import NationalityRepository from "./nationality.repository";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
-    async createClient(clientData: Partial<Client>) {
-        if (!clientData.business_name || !clientData.phone_number) throw new MissingData();
-
-        const userId = clientData.user as unknown as number;
-        const user = await readUserService(userId);
-        const nationalityId = clientData.nationality as unknown as number;
-        const nationality = await NationalityRepository.readNationality(nationalityId);
+    async createClient(clientData: ClientValidated) {
+        const user = await readUserService(clientData.user);
+        const nationality = await NationalityRepository.readNationality(clientData.nationality);
 
         await this
         .createQueryBuilder("client")
@@ -19,6 +16,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .values({
             business_name: clientData.business_name,
             phone_number: clientData.phone_number,
+            receptor_type: clientData.receptor_type,
             user: user,
             nationality: nationality
         })
@@ -31,7 +29,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
 
         if (!returnedClient) throw new NotFound("client");
 
-        await assignClientRelationService(userId, returnedClient.client_id);
+        await assignClientRelationService(clientData.user, returnedClient.client_id);
 
         return returnedClient;
     },

@@ -1,11 +1,9 @@
 import AppDataSource from "../db";
 import Product from "../entities/Product";
-import { MissingData } from "../services/errorMessages";
+import { ProductValidated } from "../services/validation";
 
 const ProductRepository = AppDataSource.getRepository(Product).extend({
-    async createProduct(productData: Partial<Product>): Promise<Product> {
-        if (!productData.name || !productData.price) throw new MissingData();
-
+    async createProduct(productData: ProductValidated): Promise<Product> {
         await this
         .createQueryBuilder("product")
         .insert()

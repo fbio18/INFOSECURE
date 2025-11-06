@@ -2,12 +2,11 @@ import AppDataSource from "../db";
 import User from "../entities/User";
 import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
-import { MissingData, NotFound } from "../services/errorMessages";
+import { NotFound } from "../services/errorMessages";
+import { UserValidated } from "../services/validation";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
-    async createUser(userData: Partial<User>, hashedPassword: string) {
-        if (!userData.email || !hashedPassword || !userData.username) throw new MissingData();
-
+    async createUser(userData: UserValidated, hashedPassword: string) {
         await this
         .createQueryBuilder("product")
         .insert()

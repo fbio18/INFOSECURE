@@ -1,22 +1,22 @@
 import AppDataSource from "../db";
 import Employee from "../entities/Employee";
 import { assignEmployeeRelationService, readUserService } from "../services/user.services";
+import { EmployeeValidated } from "../services/validation";
 
 // Las validaciones de los datos se hacen en el módulo de servicios. No cambiar los "as [tipo]"
 
 const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
-    async createEmployee(employeeData: Partial<Employee>): Promise<Employee> {
-        const userId = employeeData.user as unknown as number;
-        const user = await readUserService(userId);
+    async createEmployee(employeeData: EmployeeValidated): Promise<Employee> {
+        const user = await readUserService(employeeData.user);
 
         await this
         .createQueryBuilder("employee")
         .insert()
         .values({
-            dni: employeeData.dni as string,
-            surnames: employeeData.surnames as string,
-            names: employeeData.names as string,
-            salary: employeeData.salary as number,
+            dni: employeeData.dni,
+            surnames: employeeData.surnames,
+            names: employeeData.names,
+            salary: employeeData.salary,
             user: user
         })
         .execute();
@@ -29,7 +29,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
 
         if (!returnedEmployee) throw new Error();
 
-        assignEmployeeRelationService(userId, returnedEmployee.employee_id);
+        assignEmployeeRelationService(employeeData.user, returnedEmployee.employee_id);
 
         return returnedEmployee;
     },
