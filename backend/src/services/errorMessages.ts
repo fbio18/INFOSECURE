@@ -1,3 +1,5 @@
+import { ValiError } from "valibot";
+
 function addErrorMessage(errorType: string): { message: string, statusCode: number } {
     switch (errorType) {
         case "invalid-id":
@@ -35,33 +37,20 @@ function addErrorMessage(errorType: string): { message: string, statusCode: numb
     }
 }
 
-export class CustomError extends Error {
-    constructor(public errorCode: string, public statusCode: number) {
+export function createErrorResponse(error: any): { message: string, statusCode: number } {
+    // No intercambiar el nombre de las condicionales. Sino el caso de ValiBot nunca entra
+    // Aparentemente esto es porque instanceof toma en cuenta la herencia
+    if (error.name === "ValiError") return { message: error.message, statusCode: 404 };
 
-        if (statusCode) {
-            if (statusCode < 100 || statusCode > 600) {
-                throw new Error("El atributo statusCode de la clase CustomError debe estar en el valor [100, 599]")
-            }
-        }
+    if (error instanceof Error) return { message: error.message, statusCode: 500 };
 
-        super();
-
-        const error = addErrorMessage(errorCode);
-
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, CustomError);
-        }
-
-        this.name = "CustomError";
-        this.message = error.message;
-        this.statusCode = error.statusCode === statusCode ? error.statusCode : statusCode;
-    }
+    return { message: error.message, statusCode: error.statusCode as number };
 }
 
 export class NotFound extends Error {
     constructor(
         public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee" | "nationality",
-        private statusCode?: number
+        private _statusCode?: number
     ) {
         super();
 
@@ -69,55 +58,74 @@ export class NotFound extends Error {
 
         this.name = "NotFound"
         this.message = `El dato ${entity} no fue encontrado`;
-        this.statusCode = 404;
+        this._statusCode = 404;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
     }
 }
 
 export class InvalidId extends Error {
-    constructor(public idType: "number" | "string", private statusCode?: number) {
+    constructor(public idType: "number" | "string", private _statusCode?: number) {
         super();
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
 
         this.name = "InvalidId";
         this.message = `La id de tipo ${idType} utilizada no es válida`;
-        this.statusCode = 400;
+        this._statusCode = 400;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
     }
 }
 
 export class InvalidBody extends Error {
-    constructor(private statusCode?: number) {
+    constructor(private _statusCode?: number) {
         super();
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
 
         this.name = "InvalidBody";
         this.message = "El body está vacío o no cumple con los datos necesarios";
-        this.statusCode = 400;
+        this._statusCode = 400;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
     }
 }
 
-
 export class InvalidData extends Error {
-    constructor(private statusCode?: number) {
+    constructor(private _statusCode?: number) {
         super();
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
 
         this.name = "InvalidData";
         this.message = "El formato de los datos es incorrecto";
-        this.statusCode = 400;
+        this._statusCode = 400;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
     }
 }
 
 export class MissingData extends Error {
-    constructor(private statusCode?: number) {
+    constructor(private _statusCode?: number) {
         super();
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
 
         this.name = "MissingData";
         this.message = "Faltan uno o más campos";
-        this.statusCode = 400;
+        this._statusCode = 400;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
     }
 }
