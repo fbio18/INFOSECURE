@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, UpdateDateColumn, Column } from "typeorm";
 import Cart_Product from "./Cart_Product";
 import Client from "./Client";
 
@@ -6,6 +6,9 @@ import Client from "./Client";
 export default class Cart extends BaseEntity {
     @PrimaryGeneratedColumn()
     cart_id: number;
+
+    @Column({ default: true })
+    is_active: boolean;
 
     @CreateDateColumn()
     creation_date: Date;
