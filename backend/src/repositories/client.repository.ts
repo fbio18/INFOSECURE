@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import Client from "../entities/Client";
+import { readCartService } from "../services/cart.services";
 import { NotFound } from "../services/errorMessages";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
@@ -74,6 +75,16 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .delete()
         .where("client.client_id", { clientId })
         .execute();
+    },
+
+    async assignCartRelation(clientId: number, cartId: number) {
+        const cart = await readCartService(cartId);
+
+        const client = await this.readClient(clientId);
+
+        client.carts.push(cart);
+
+        await client.save();
     }
 })
 
