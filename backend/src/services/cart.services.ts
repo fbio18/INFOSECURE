@@ -1,8 +1,11 @@
 import Cart from "../entities/Cart";
 import CartRepository from "../repositories/cart.repository";
+import { validateCartData } from "./validation";
 
-export async function createCartService() {
-    return await CartRepository.createCart();
+export async function createCartService(cartData: Partial<Cart>): Promise<Cart> {
+    const validatedData = validateCartData(cartData);
+
+    return await CartRepository.createCart(validatedData);
 }
 
 export async function readCartService(cartId: number): Promise<Cart> {
