@@ -14,6 +14,8 @@ const messages = {
     nonNumberCharacter: "El string enviado solo debe contener números",
     invalidRole: "El rol ingresado no es válido",
     maxRatingExceeded: "El valor de rating no debe ser mayor a 5",
+    invalidReceptorType: "El tipo de receptor enviado no es válido",
+    minIdValue: "El valor del ID no debe ser menor a 1"
 }
 
 export function validateBody(body: object) {
@@ -50,13 +52,25 @@ const userSchema = v.object({
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
         v.minLength(minPasswordLength)
+    ),
+    username: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
     )
 });
 
-export function validateUserData(userData: unknown) {
-    type userData = v.InferOutput<typeof userSchema>;
+export type UserValidated = v.InferOutput<typeof userSchema>;
 
+export function validateUserData(userData: unknown) {
     return v.parse(userSchema, userData);
+}
+
+function validateReceptorType(receptorType: string): boolean {
+    const validReceptorTypes = ["A", "B", "C", "T"];
+
+    if (!validReceptorTypes.includes(receptorType)) return false;
+
+    return true;
 }
 
 const clientSchema = v.object({
@@ -68,12 +82,28 @@ const clientSchema = v.object({
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
         v.check(validateNumericString, messages.nonNumberCharacter)
+    ),
+    receptor_type: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+        v.length(1),
+        v.check(validateReceptorType, messages.invalidReceptorType)
+    ),
+    nationality: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
+    ),
+    user: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
     )
 });
 
-export function validateClientData(clientData: unknown) {
-    type clientData = v.InferOutput<typeof clientSchema>;
+export type ClientValidated = v.InferOutput<typeof clientSchema>;
 
+export function validateClientData(clientData: unknown) {
     return v.parse(clientSchema, clientData);
 }
 
@@ -87,32 +117,40 @@ const productSchema = v.object({
     )
 })
 
-export function validateProductData(productData: unknown) {
-    type productData = v.InferOutput<typeof productSchema>;
+export type ProductValidated = v.InferOutput<typeof productSchema>;
 
+export function validateProductData(productData: unknown) {
     return v.parse(productSchema, productData);
 }
 
+const minSalaryValue = 317800;
+const employeeSchema = v.object({
+    dni: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+        v.length(8)
+    ),
+    names: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+    ),
+    surnames: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+    ),
+    salary: v.pipe(
+        v.number(messages.number),
+        v.minValue(minSalaryValue, `El valor del salario no puede ser menor a ${minSalaryValue}`)
+    ),
+    user: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
+    )
+});
+
+export type EmployeeValidated = v.InferOutput<typeof employeeSchema>;
+
 export function validateEmployeeData(employeeData: unknown) {
-    const minSalaryValue = 317800;
-
-    const employeeSchema = v.object({
-        dni: v.pipe(
-            v.string(messages.string),
-            v.nonEmpty(messages.nonEmpty),
-            v.length(8)
-        ),
-        surnames: v.pipe(
-            v.string(messages.string),
-            v.nonEmpty(messages.nonEmpty)
-        ),
-        salary: v.pipe(
-            v.number(messages.number),
-            v.minValue(minSalaryValue, `El valor del salario no puede ser menor a ${minSalaryValue}`)
-        )
-    })
-
-    type employeeData = v.InferOutput<typeof employeeSchema>;
-
     return v.parse(employeeSchema, employeeData);
 }
