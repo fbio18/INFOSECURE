@@ -4,9 +4,9 @@ import { InvalidData } from "./errorMessages";
 import { validateClientData } from "./validation";
 
 export async function createClientService(clientData: Client): Promise<Client> {
-    if (!validateClientData(clientData)) throw new InvalidData();
+    const validatedData = validateClientData(clientData);
 
-    return await ClientRepository.createClient(clientData);
+    return await ClientRepository.createClient(validatedData);
 }
 
 export async function readClientService(clientId: number): Promise<Client> {
@@ -23,4 +23,8 @@ export async function updateClientService(clientId: number) {
 
 export async function deleteClientService(clientId: number) {
     await ClientRepository.deleteClient(clientId);
+}
+
+export async function assignCartRelation(clientId: number, cartId: number) {
+
 }
