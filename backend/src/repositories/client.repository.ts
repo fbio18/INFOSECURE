@@ -1,17 +1,26 @@
 import AppDataSource from "../db";
 import Client from "../entities/Client";
 import { MissingData, NotFound } from "../services/errorMessages";
+import { assignClientRelationService, readUserService } from "../services/user.services";
+import NationalityRepository from "./nationality.repository";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
     async createClient(clientData: Partial<Client>) {
         if (!clientData.business_name || !clientData.phone_number) throw new MissingData();
+
+        const userId = clientData.user as unknown as number;
+        const user = await readUserService(userId);
+        const nationalityId = clientData.nationality as unknown as number;
+        const nationality = await NationalityRepository.readNationality(nationalityId);
 
         await this
         .createQueryBuilder("client")
         .insert()
         .values({
             business_name: clientData.business_name,
-            phone_number: clientData.phone_number
+            phone_number: clientData.phone_number,
+            user: user,
+            nationality: nationality
         })
         .execute();
 
@@ -21,6 +30,8 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .getOne();
 
         if (!returnedClient) throw new NotFound("client");
+
+        await assignClientRelationService(userId, returnedClient.client_id);
 
         return returnedClient;
     },
