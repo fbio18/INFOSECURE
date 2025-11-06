@@ -14,7 +14,7 @@ export default class Client extends BaseEntity {
     @Column()
     phone_number: string;
 
-    @Column()
+    @Column({ length: 1 })
     receptor_type: string;
 
     @OneToOne(() => Nationality)
