@@ -1,4 +1,5 @@
-import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from "typeorm";
+import User from "./User";
 
 @Entity()
 export default class Employee extends BaseEntity {
@@ -22,4 +23,7 @@ export default class Employee extends BaseEntity {
 
     @Column({ default: false })
     is_in_license: boolean;
+
+    @OneToOne(() => User, (user) => user.employee)
+    user: User;
 }
