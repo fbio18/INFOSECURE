@@ -7,7 +7,7 @@ export async function createClientController(req: Request, res: Response) {
     try {
         if (!validateBody(req.body)) throw new MissingData();
 
-        const client = await createClientService();
+        const client = await createClientService(req.body);
 
         res.send(client);
     } catch (error) {
