@@ -36,10 +36,13 @@ export async function deleteUserService(userId: number) {
 }
 
 export async function assignEmployeeRelationService(userId: number, employeeId: number) {
-    if (!validateNumberId(employeeId) || !validateNumberId(userId)) throw InvalidId;
+    if (!validateNumberId(employeeId) || !validateNumberId(userId)) throw new InvalidId("number");
 
     await UserRepository.assignEmployeeRelation(userId, employeeId);
 }
 
-export async function asignClientRelation() {
+export async function assignClientRelationService(userId: number, clientId: number) {
+    if (!validateNumberId(userId) || !validateNumberId(clientId)) throw new InvalidId("number");
+
+    await UserRepository.assignClientRelation(userId, clientId);
 }
