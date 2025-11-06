@@ -8,6 +8,7 @@ import clientRouter from "./routes/client.routes";
 import employeeRouter from "./routes/employee.routes";
 import productRouter from "./routes/product.routes";
 import invoiceRouter from "./routes/invoice.routes";
+import cartRoutes from "./routes/cart.routes";
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(clientRouter);
 app.use(employeeRouter);
 app.use(productRouter);
 app.use(invoiceRouter);
+app.use(cartRoutes);
 
 export default app;
