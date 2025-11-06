@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import User from "../entities/User";
+import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
 import { MissingData, NotFound } from "../services/errorMessages";
 
@@ -78,6 +79,17 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .createQueryBuilder("user")
         .update()
         .set({ employee: employee })
+        .where("user_id = :userId", { userId })
+        .execute();
+    },
+
+    async assignClientRelation(userId: number, clientId: number) {
+        const client = await readClientService(clientId);
+
+        await this
+        .createQueryBuilder("user")
+        .update()
+        .set({ client: client })
         .where("user_id = :userId", { userId })
         .execute();
     }
