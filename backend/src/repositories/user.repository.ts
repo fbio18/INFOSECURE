@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import User from "../entities/User";
+import { readEmployeeService } from "../services/employee.services";
 import { MissingData, NotFound } from "../services/errorMessages";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
@@ -39,7 +40,7 @@ const UserRepository = AppDataSource.getRepository(User).extend({
 
     async readAllUsers() {
         const users = await this
-        .createQueryBuilder()
+        .createQueryBuilder("user")
         .getMany();
 
         if (!users) throw new Error();
@@ -67,6 +68,17 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .createQueryBuilder("user")
         .delete()
         .where("user.user_id = :userId", { userId })
+        .execute();
+    },
+
+    async assignEmployeeRelation(userId: number, employeeId: number) {
+        const employee = await readEmployeeService(employeeId);
+
+        await this
+        .createQueryBuilder("user")
+        .update()
+        .set({ employee: employee })
+        .where("user_id = :userId", { userId })
         .execute();
     }
 })
