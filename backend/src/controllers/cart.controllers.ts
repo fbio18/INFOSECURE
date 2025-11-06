@@ -1,14 +1,18 @@
 import { Request, Response } from "express";
 import { createCartService, readCartService, updateCartService, deleteCartService } from "../services/cart.services";
+import { createErrorResponse, InvalidBody } from "../services/errorMessages";
+import { validateBody } from "../services/validation";
 
 export async function createCartController(req: Request, res: Response) {
     try {
-        const cart = await createCartService();
+        if (!validateBody(req.body)) throw new InvalidBody();
 
-        console.log("Creating cart");
+        const cart = await createCartService(req.body);
+
         res.send(cart);
     } catch (error) {
-
+        console.error(error);
+        res.send(createErrorResponse(error));
     }
 }
 
