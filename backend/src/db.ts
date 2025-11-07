@@ -6,7 +6,6 @@ import Cart_Product from "./entities/Cart_Product";
 import Client from "./entities/Client";
 import Product from "./entities/Product";
 import Invoice from "./entities/Invoice";
-import Invoice_type from "./entities/Invoice_type";
 import Invoice_Product from "./entities/Invoice_product";
 import Role from "./entities/Role";
 import Nationality from "./entities/Nationality";
@@ -23,7 +22,7 @@ export const AppDataSource = new DataSource({
     password: DB_PASSWORD,
     port: (<number>DB_PORT),
     database: DB_NAME,
-    entities: [User, Cart, Client, Product, Invoice, Invoice_type, Role, Nationality, Employee, Invoice_Product, Cart_Product],
+    entities: [User, Cart, Client, Product, Invoice, Role, Nationality, Employee, Invoice_Product, Cart_Product],
     logging: true,
     synchronize: true,
     dropSchema: true
