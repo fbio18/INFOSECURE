@@ -30,10 +30,12 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
     async readCart(cartId: number): Promise<Cart> {
         const cart = await this
         .createQueryBuilder("cart")
+        .leftJoinAndSelect("cart.client", "client")
+        .leftJoinAndSelect("cart.products", "client")
         .where("cart.id = :cartId", { cartId })
         .getOne();
 
-        if (!cart) throw new Error();
+        if (!cart) throw new NotFound("cart");
 
         return cart;
     },
@@ -41,9 +43,11 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
     async readAllCarts(): Promise<Cart[]> {
         const carts = await this
         .createQueryBuilder("cart")
+        .leftJoinAndSelect("cart.client", "client")
+        .leftJoinAndSelect("cart.products", "client")
         .getMany();
 
-        if (!carts) throw new Error();
+        if (!carts) throw new NotFound("cart");
 
         return carts;
     },

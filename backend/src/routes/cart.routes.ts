@@ -4,7 +4,8 @@ import { createCartController, readCartController, updateCartController, deleteC
 const router = Router();
 
 router.post("/cart", createCartController);
-router.get("/cart", readCartController)
+router.get("/cart/:id", readCartController)
+router.get("/cart")
 router.put("/cart", updateCartController)
 router.delete("/cart", deleteCartController)
 
