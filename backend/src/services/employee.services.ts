@@ -1,7 +1,7 @@
 import Employee from "../entities/Employee";
 import EmployeeRepository from "../repositories/employee.repository";
-import { InvalidData } from "./errorMessages";
-import { EmployeeValidated, validateEmployeeData } from "./validation";
+import { InvalidId } from "./errorMessages";
+import { validateEmployeeData, validateNumberId } from "./validation";
 
 export async function createEmployeeService(employeeData: Partial<Employee>): Promise<Employee> {
     const validatedEmployeeData = validateEmployeeData(employeeData);
@@ -10,6 +10,8 @@ export async function createEmployeeService(employeeData: Partial<Employee>): Pr
 }
 
 export async function readEmployeeService(employeeId: number) {
+    if (!validateNumberId(employeeId)) throw new InvalidId("number");
+
     return await EmployeeRepository.readEmployee(employeeId);
 }
 

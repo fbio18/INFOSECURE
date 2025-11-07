@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { createEmployeeController, readEmployeeController, updateEmployeeController, deleteEmployeeController } from "../controllers/employee.controllers";
+import { createEmployeeController, readEmployeeController, updateEmployeeController, deleteEmployeeController, readAllEmployeesController } from "../controllers/employee.controllers";
 
 const router = Router();
 
 router.post("/employee", createEmployeeController);
-router.get("/employee", readEmployeeController);
+router.get("/employee/:id", readEmployeeController);
+router.get("/employee", readAllEmployeesController);
 router.put("/employee", updateEmployeeController);
 router.delete("/employee", deleteEmployeeController);
 

@@ -37,6 +37,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
     async readEmployee(employeeId: number) {
         const employee = await this
         .createQueryBuilder("employee")
+        .leftJoinAndSelect("employee.user", "user")
         .where("employee.employee_id = :employeeId", { employeeId })
         .getOne();
 
@@ -48,6 +49,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
     async readAllEmployees(): Promise<Employee[]> {
         const employees = await this
         .createQueryBuilder()
+        .leftJoinAndSelect("employee.user", "user")
         .getMany();
 
         if (!employees) throw new Error();
