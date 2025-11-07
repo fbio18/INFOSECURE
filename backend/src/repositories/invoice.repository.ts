@@ -1,6 +1,7 @@
 import AppDataSource from "../db";
 import Invoice, { TInvoice_type } from "../entities/Invoice";
 import { readClientService } from "../services/client.services";
+import { NotFound } from "../services/errorMessages";
 import { InvoiceValidated } from "../services/validation";
 import ClientRepository from "./client.repository";
 
@@ -33,10 +34,12 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
     async readInvoice(invoiceId: number) {
         const invoice = await this
         .createQueryBuilder("invoice")
+        .leftJoinAndSelect("invoice.client", "client")
+        .leftJoinAndSelect("invoice.products", "products")
         .where("invoice.order_number= :invoiceId", { invoiceId })
         .getOne();
 
-        if (!invoice) throw new Error();
+        if (!invoice) throw new NotFound("invoice");
 
         return invoice;
     },
@@ -44,9 +47,11 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
     async readAllInvoices() {
         const invoices = await this
         .createQueryBuilder()
+        .leftJoinAndSelect("invoice.client", "client")
+        .leftJoinAndSelect("invoice.products", "products")
         .getMany();
 
-        if (!invoices) throw new Error();
+        if (!invoices) throw new NotFound("invoice");
 
         return invoices;
     },

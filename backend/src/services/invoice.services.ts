@@ -1,6 +1,7 @@
 import Invoice from "../entities/Invoice";
 import InvoiceRepository from "../repositories/invoice.repository";
-import { validateInvoiceData } from "./validation";
+import { InvalidId } from "./errorMessages";
+import { validateInvoiceData, validateNumberId } from "./validation";
 
 export async function createInvoiceService(invoiceData: Partial<Invoice>) {
     const validatedData = validateInvoiceData(invoiceData);
@@ -9,6 +10,8 @@ export async function createInvoiceService(invoiceData: Partial<Invoice>) {
 }
 
 export async function readInvoiceService(invoiceId: number): Promise<Invoice> {
+    if (!validateNumberId(invoiceId)) throw new InvalidId("number");
+
     return await InvoiceRepository.readInvoice(invoiceId);
 }
 
