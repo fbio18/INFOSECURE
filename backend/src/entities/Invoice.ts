@@ -2,7 +2,7 @@ import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDa
 import Client from "./Client";
 import Invoice_Product from "./Invoice_product";
 
-type TInvoice_type = "A" | "B" | "C" | "E" | "M" | "T";
+export type TInvoice_type = "A" | "B" | "C" | "E" | "M" | "T";
 
 @Entity()
 export default class Invoice extends BaseEntity {
