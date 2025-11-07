@@ -2,7 +2,7 @@ import Invoice from "../entities/Invoice";
 import InvoiceRepository from "../repositories/invoice.repository";
 import { validateInvoiceData } from "./validation";
 
-export async function createInvoiceService(invoiceData: Partial<invoiceData>) {
+export async function createInvoiceService(invoiceData: Partial<Invoice>) {
     const validatedData = validateInvoiceData(invoiceData);
 
     return await InvoiceRepository.createInvoice(validatedData);
