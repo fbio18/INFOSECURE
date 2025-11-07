@@ -1,7 +1,7 @@
 import AppDataSource from "../db";
 import Client, { Receptor_type } from "../entities/Client";
 import { readCartService } from "../services/cart.services";
-import { NotFound } from "../services/errorMessages";
+import { MissingData, NotFound } from "../services/errorMessages";
 import { readInvoiceService } from "../services/invoice.services";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
@@ -39,10 +39,14 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
     async readClient(clientId: number) {
         const client = await this
         .createQueryBuilder("client")
+        .leftJoinAndSelect("client.carts", "carts")
+        .leftJoinAndSelect("client.nationality", "nationalities")
+        .leftJoinAndSelect("client.invoices", "invoices")
+        .leftJoinAndSelect("client.user", "user")
         .where("client.client_id = :clientId", { clientId })
         .getOne();
 
-        if (!client) throw new Error();
+        if (!client) throw new MissingData();
 
         return client;
     },
@@ -50,9 +54,13 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
     async readAllClients(): Promise<Client[]> {
         const client = await this
         .createQueryBuilder()
+        .leftJoinAndSelect("client.carts", "carts")
+        .leftJoinAndSelect("client.nationality", "nationalities")
+        .leftJoinAndSelect("client.invoices", "invoices")
+        .leftJoinAndSelect("client.user", "user")
         .getMany();
 
-        if (!client) throw new Error();
+        if (!client) throw new MissingData();
 
         return client;
     },
