@@ -1,7 +1,8 @@
-import { Column, OneToOne, Entity, BaseEntity, PrimaryGeneratedColumn, JoinTable, OneToMany, CreateDateColumn } from "typeorm";
+import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from "typeorm";
 import Client from "./Client";
-import Invoice_type from "./Invoice_type";
 import Invoice_Product from "./Invoice_product";
+
+type TInvoice_type = "A" | "B" | "C" | "E" | "M" | "T";
 
 @Entity()
 export default class Invoice extends BaseEntity {
@@ -17,13 +18,11 @@ export default class Invoice extends BaseEntity {
     @Column()
     total_amount: number;
 
-    @OneToOne(() => Client)
-    @JoinTable()
+    @OneToMany(() => Client, (client) => client.invoices)
     client: Client;
 
-    @OneToOne(() => Invoice_type)
-    @JoinTable()
-    invoice_type: Invoice_type;
+    @Column({ length: 1 })
+    invoice_type: TInvoice_type;
 
     @OneToMany(() => Invoice_Product, (invoice_product) => invoice_product.invoice)
     invoice_products: Invoice_Product[];
