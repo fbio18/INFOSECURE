@@ -9,7 +9,7 @@ export default class Invoice extends BaseEntity {
     @PrimaryGeneratedColumn()
     order_number: number;
 
-    @Column()
+    @Column({ default: "InfoSecure S.A.S." })
     emitter: string;
 
     @CreateDateColumn()
