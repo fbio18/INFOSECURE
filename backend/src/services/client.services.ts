@@ -1,7 +1,7 @@
 import Client from "../entities/Client";
 import ClientRepository from "../repositories/client.repository";
-import { InvalidData } from "./errorMessages";
-import { validateClientData } from "./validation";
+import { InvalidData, InvalidId } from "./errorMessages";
+import { validateClientData, validateNumberId } from "./validation";
 
 export async function createClientService(clientData: Client): Promise<Client> {
     const validatedData = validateClientData(clientData);
@@ -10,6 +10,8 @@ export async function createClientService(clientData: Client): Promise<Client> {
 }
 
 export async function readClientService(clientId: number): Promise<Client> {
+    if (!validateNumberId(clientId)) throw new InvalidId("number");
+
     return await ClientRepository.readClient(clientId);
 }
 
