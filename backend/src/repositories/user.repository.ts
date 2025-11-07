@@ -33,7 +33,7 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .where("user.user_id = :userId", { userId })
         .getOne();
 
-        if (!user) throw new Error();
+        if (!user) throw new NotFound("user");
 
         return user;
     },
@@ -43,10 +43,9 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .createQueryBuilder("user")
         .getMany();
 
-        if (!users) throw new Error();
+        if (!users) throw new NotFound("user");
 
         return users;
-
     },
 
     async updateUser() {
