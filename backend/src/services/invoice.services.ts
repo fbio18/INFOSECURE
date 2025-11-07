@@ -1,8 +1,11 @@
 import Invoice from "../entities/Invoice";
 import InvoiceRepository from "../repositories/invoice.repository";
+import { validateInvoiceData } from "./validation";
 
-export async function createInvoiceService() {
-    return await InvoiceRepository.createInvoice();
+export async function createInvoiceService(invoiceData: Partial<invoiceData>) {
+    const validatedData = validateInvoiceData(invoiceData);
+
+    return await InvoiceRepository.createInvoice(validatedData);
 }
 
 export async function readInvoiceService(invoiceId: number): Promise<Invoice> {
