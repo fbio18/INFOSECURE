@@ -15,6 +15,7 @@ const messages = {
     invalidRole: "El rol ingresado no es válido",
     maxRatingExceeded: "El valor de rating no debe ser mayor a 5",
     invalidReceptorType: "El tipo de receptor enviado no es válido",
+    invalidInvoiceType: "El tipo de factura enviado no es válido",
     minIdValue: "El valor del ID no debe ser menor a 1"
 }
 
@@ -65,8 +66,8 @@ export function validateUserData(userData: unknown) {
     return v.parse(userSchema, userData);
 }
 
-function validateReceptorType(receptorType: string): boolean {
-    const validReceptorTypes = ["A", "B", "C", "T"];
+function validateInvoiceType(receptorType: string): boolean {
+    const validReceptorTypes = ["A", "B", "C", "E", "M", "T"];
 
     if (!validReceptorTypes.includes(receptorType)) return false;
 
@@ -87,7 +88,7 @@ const clientSchema = v.object({
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
         v.length(1),
-        v.check(validateReceptorType, messages.invalidReceptorType)
+        //v.check(validateInvoiceType, messages.invalidReceptorType)
     ),
     nationality: v.pipe(
         v.number(messages.number),
@@ -164,7 +165,36 @@ const cartSchema = v.object({
 })
 
 export type CartValidated = v.InferOutput<typeof cartSchema>;
+type InvoiceTypeType = "A" | "B" | "C" | "E" | "M" | "T" ;
 
 export function validateCartData(cartData: unknown) {
     return v.parse(cartSchema, cartData);
+}
+
+const invoiceSchema = v.object({
+    emitter: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+    ),
+    client: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
+    ),
+    total_amount: 
+        v.pipe(
+            v.number(messages.number),
+    ),
+    invoice_type: v.pipe(
+        v.string(messages.string),
+        v.nonEmpty(messages.nonEmpty),
+        v.length(1),
+        v.check(validateInvoiceType, messages.invalidInvoiceType)
+    )
+});
+
+export type InvoiceValidated = v.InferOutput<typeof invoiceSchema>
+
+export function validateInvoiceData(invoiceData: unknown) {
+    return v.parse(invoiceSchema, invoiceData);
 }
