@@ -1,7 +1,10 @@
-import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, OneToOne, JoinTable, ManyToMany } from "typeorm";
+import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, OneToOne, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import Nationality from "./Nationality";
 import Cart from "./Cart";
 import User from "./User";
+import Invoice from "./Invoice";
+
+export type Receptor_type = "consumidor-final" | "monotributista" | "responsable-inscripto" | "exportacion" | "turista-extranjero";
 
 @Entity()
 export default class Client extends BaseEntity {
@@ -14,8 +17,8 @@ export default class Client extends BaseEntity {
     @Column()
     phone_number: string;
 
-    @Column({ length: 1 })
-    receptor_type: string;
+    @Column()
+    receptor_type: Receptor_type;
 
     @OneToOne(() => Nationality)
     @JoinTable()
@@ -27,4 +30,7 @@ export default class Client extends BaseEntity {
 
     @OneToOne(() => User, (user) => user.client)
     user: User;
+
+    @OneToMany(() => Invoice, (invoice) => invoice.client)
+    invoices: Invoice[];
 }
