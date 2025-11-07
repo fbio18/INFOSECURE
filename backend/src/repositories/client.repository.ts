@@ -1,7 +1,8 @@
 import AppDataSource from "../db";
-import Client from "../entities/Client";
+import Client, { Receptor_type } from "../entities/Client";
 import { readCartService } from "../services/cart.services";
 import { NotFound } from "../services/errorMessages";
+import { readInvoiceService } from "../services/invoice.services";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
 import NationalityRepository from "./nationality.repository";
@@ -17,7 +18,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .values({
             business_name: clientData.business_name,
             phone_number: clientData.phone_number,
-            receptor_type: clientData.receptor_type,
+            receptor_type: clientData.receptor_type as Receptor_type,
             user: user,
             nationality: nationality
         })
@@ -82,9 +83,21 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
 
         const client = await this.readClient(clientId);
 
+        if (!client.carts) client.carts = [];
+
         client.carts.push(cart);
 
         await client.save();
+    },
+
+    async addInvoice(clientId: number, invoiceId: number): Promise<void> {
+        const invoice = await readInvoiceService(invoiceId);
+
+        const client = await this.readClient(clientId);
+
+        if (!client.invoices) client.invoices = [];
+
+        client.invoices.push(invoice);
     }
 })
 
