@@ -1,23 +1,31 @@
 import AppDataSource from "../db";
-import Invoice from "../entities/Invoice";
+import Invoice, { TInvoice_type } from "../entities/Invoice";
+import { readClientService } from "../services/client.services";
+import { InvoiceValidated } from "../services/validation";
+import ClientRepository from "./client.repository";
 
 const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
-    async createInvoice(emitter: string, totalAmount: number) {
+    async createInvoice(invoiceData: InvoiceValidated) {
+        const client = await readClientService(invoiceData.client);
+
         await this
         .createQueryBuilder("invoice")
         .insert()
         .values({
-            emitter: emitter,
-            total_amount: totalAmount
+            total_amount: invoiceData.total_amount,
+            invoice_type: invoiceData.invoice_type as TInvoice_type,
+            client: client
         })
         .execute();
 
         const returnedInvoice = await this
         .createQueryBuilder("invoice")
-        .orderBy("invoice.invoice_id", "DESC")
+        .orderBy("invoice.order_number", "DESC")
         .getOne();
 
         if (!returnedInvoice) throw new Error();
+
+        await ClientRepository.addInvoice(invoiceData.client, returnedInvoice.order_number);
 
         return returnedInvoice;
     },
@@ -25,7 +33,7 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
     async readInvoice(invoiceId: number) {
         const invoice = await this
         .createQueryBuilder("invoice")
-        .where("invoice.invoice_id = :invoiceId", { invoiceId })
+        .where("invoice.order_number= :invoiceId", { invoiceId })
         .getOne();
 
         if (!invoice) throw new Error();
@@ -57,7 +65,7 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         await this
         .createQueryBuilder("invoice")
         .delete()
-        .where("invoice.invoice_id = :invoiceId", { invoiceId })
+        .where("invoice.order_number= :invoiceId", { invoiceId })
         .execute();
     }
 })
