@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import Product from "../entities/Product";
+import { NotFound } from "../services/errorMessages";
 import { ProductValidated } from "../services/validation";
 
 const ProductRepository = AppDataSource.getRepository(Product).extend({
@@ -29,7 +30,7 @@ const ProductRepository = AppDataSource.getRepository(Product).extend({
         .where("product.product_id = :productId", { productId })
         .getOne();
 
-        if (!product) throw new Error();
+        if (!product) throw new NotFound("product");
 
         return product;
     },
@@ -39,7 +40,7 @@ const ProductRepository = AppDataSource.getRepository(Product).extend({
         .createQueryBuilder()
         .getMany();
 
-        if (!products) throw new Error();
+        if (!products) throw new NotFound("product");
 
         return products;
     },
