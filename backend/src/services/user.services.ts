@@ -1,9 +1,10 @@
 import User from "../entities/User";
 import UserRepository from "../repositories/user.repository";
-import { UpdateUserValidated, validateNumberId, validateUpdateUserData, validateUserData } from "./validation";
+import { validateNumberId, validateUserData } from "./validation";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "../config";
 import { InvalidData, InvalidId } from "./errorMessages";
+import { validateUpdateUserData } from "./update-validation";
 
 export async function createUserService(userData: Partial<User>) {
     //if (!validateUserData(userData)) throw new InvalidData();
