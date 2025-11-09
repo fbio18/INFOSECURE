@@ -122,12 +122,7 @@ overflow: hidden;
 
     max-height: 60px;
 }
-#navbarNav
- {
-   background-color: #193666;
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-   
- }
+
  #card-image{
    
     max-width: 80%;
@@ -164,21 +159,7 @@ overflow: hidden;
 #text{
   color: aliceblue;
 }
-#nav{
-  color: aliceblue;
-}
 
-#logofooter{
-  max-width: 210px;
-text-align: center;
-}
-#contacto{
-  margin-left: 80px;
-}
-#sobrenosotros
-{
-  margin-left: 80px;
-}
 
 .btn--descargar {
   background-color: #0078d0;
@@ -249,7 +230,9 @@ animation-range: entry 0% cover 40%;
  }
  #navbarNav
  {
-   background-color: #1e53a7;
+   
+      background-color: #193666;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  }
 
  #nav

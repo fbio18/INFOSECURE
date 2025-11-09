@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="RRHH.css" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    
+  <nav class="navbar navbar-expand-sm " id="navbarNav"  >
+  <div class="container-fluid">
+   <nav class="navbar "  >
+  <div class="container-fluid" >
+    <a class="navbar-brand" href="#" id="text">
+      <img src="logo-ISblanco-removebg-preview.png"alt="Logo"  class="img-fluid" id="logonav" >
+      InfoSecure
+    </a>
+  </div>
+</nav>
+
+    <a class="navbar-brand" href="#" ></a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse"  >
+      <ul class="navbar-nav ms-auto" >
+        <li class="nav-item">
+          <a class="nav-link" href="Inicio_Sesión.html" id="nav">Inicio de sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="registro.html" id="nav">Registrarse</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main>
+    <h1>Recursos Humanos</h1>
+  
+  
+    <div class="filters">
+      <select id="rol">
+        <option value="">Todos los roles</option>
+        <option>Gerente de RRHH</option>
+        <option>Gerente de Producción</option>
+        <option>Gerente de Marketing</option>
+        <option>Gerente General</option>
+        <option>Programador</option>
+        <option>Atención al cliente</option>
+        <option>Contador</option>
+        <option>Personal de limpieza</option>
+      </select>
+
+      <div class="range-group">
+        <label>Salario:</label>
+        <input type="number" id="salarioMin" placeholder="Mínimo">
+        <input type="number" id="salarioMax" placeholder="Máximo">
+      </div>
+
+      <div class="range-group">
+        <label>Antigüedad:</label>
+        <input type="number" id="antiguedadMin" placeholder="Desde (años)">
+        <input type="number" id="antiguedadMax" placeholder="Hasta (años)">
+      </div>
+
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="activo"> Activo</label>
+        <label><input type="checkbox" id="licencia"> En licencia</label>
+      </div>
+
+      <button id="filtrar">Filtrar</button>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Salario</th>
+            <th>Antigüedad</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaEmpleados">
+          <tr><td colspan="5">Cargando datos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+   <footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <div class="footer-brand">
+        <img src="logo-ISblanco chiquito.png" alt="Logo InfoSecure" class="footer-logo" />
+        <h3>InfoSecure</h3>
+      </div>
+      <p>© 2025 InfoSecure S.A. Todos los derechos reservados.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#about">Sobre nosotros</a>
+      <a href="#services">Servicios</a>
+      <a href="#contact">Contacto</a>
+      <a href="#privacy">Política de privacidad</a>
+    </div>
+
+    <div class="footer-socials">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+    </div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="script.js"></script>
+
+
+
+</body>
+</html>
