@@ -116,3 +116,17 @@ const updatedEmployeeSchema = v.object({
 export function validateUpdateEmployeeData(employeeData: unknown) {
     return v.parse(updatedEmployeeSchema, employeeData);
 }
+
+const updateCartSchema = v.object({
+    client: v.nullish(
+        v.pipe(
+            v.number(),
+            v.integer(),
+            v.minValue(1)
+        )
+    )
+})
+
+export function validateUpdateCartData(cartData: unknown) {
+    return v.parse(updateCartSchema, cartData);
+}
