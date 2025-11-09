@@ -6,6 +6,7 @@ import { MissingData, NotFound } from "../services/errorMessages";
 import { readInvoiceService } from "../services/invoice.services";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
+import CartRepository from "./cart.repository";
 import NationalityRepository from "./nationality.repository";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
@@ -97,11 +98,11 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
 
         const client = await this.readClient(clientId);
 
-        if (!client.carts) client.carts = [];
-
-        client.carts.push(cart);
-
-        await client.save();
+        await this
+        .createQueryBuilder("cart")
+        .relation(Client, "carts")
+        .of(client)
+        .set(cart);
     },
 
     async addInvoice(clientId: number, invoiceId: number): Promise<void> {

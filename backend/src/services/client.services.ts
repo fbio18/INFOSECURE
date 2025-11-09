@@ -31,6 +31,6 @@ export async function deleteClientService(clientId: number) {
     await ClientRepository.deleteClient(clientId);
 }
 
-export async function assignCartRelation(clientId: number, cartId: number) {
-
+export async function assignCartRelationService(clientId: number, cartId: number) {
+    await ClientRepository.assignCartRelation(clientId, cartId);
 }

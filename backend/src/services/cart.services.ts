@@ -1,7 +1,9 @@
 import Cart from "../entities/Cart";
+import Item from "../entities/Item";
 import CartRepository from "../repositories/cart.repository";
-import { InvalidId } from "./errorMessages";
-import { validateCartData, validateNumberId } from "./validation";
+import { InvalidData, InvalidId } from "./errorMessages";
+import { validateUpdateCartData } from "./update-validation";
+import { ItemValidated, validateCartData, validateItemData, validateNumberId } from "./validation";
 
 export async function createCartService(cartData: Partial<Cart>): Promise<Cart> {
     const validatedData = validateCartData(cartData);
@@ -20,8 +22,20 @@ export async function readAllCartsService(): Promise<Cart[]> {
     
 }
 
-export async function updateCartService() {
-    return await CartRepository.updateCart();
+export async function updateCartService(cartId: number, cartUpdatedData: Partial<Cart>) {
+    if (!validateNumberId(cartId)) throw new InvalidId("number");
+    if (!validateUpdateCartData(cartUpdatedData)) throw new InvalidData();
+
+    return await CartRepository.updateCart(cartId, cartUpdatedData);
+}
+
+export async function addItemService(cartId: number, productId: number, itemData: Partial<Item>): Promise<Cart> {
+    if (!validateNumberId(cartId) || !validateNumberId(productId)) throw new InvalidId("number");
+    
+    const validatedData: ItemValidated = validateItemData(itemData);
+
+    return await CartRepository.addItem(cartId, productId, validatedData);
+
 }
 
 export async function deleteCartService(cartId: number) {
