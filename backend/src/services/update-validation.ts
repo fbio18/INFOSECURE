@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { messages, MINPASSWORDLENGTH, validateNumericString } from "./validation";
+import { messages, MIN_SALARY, MINPASSWORDLENGTH, validateNumericString } from "./validation";
 
 const updateUserSchema = v.object({
     email: v.nullish(
@@ -78,4 +78,41 @@ const updateProductSchema = v.object({
 
 export function validateUpdatedProductData(productData: unknown) {
     return v.parse(updateProductSchema, productData);
+}
+
+const updatedEmployeeSchema = v.object({
+    dni: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+            v.length(8)
+    )),
+    names: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+    )),
+    surnames: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+    )),
+    salary: v.nullish(
+        v.pipe(
+            v.number(messages.number),
+            v.minValue(MIN_SALARY, `El valor del salario no puede ser menor a ${MIN_SALARY}`)
+    )),
+    user: v.nullish(
+        v.pipe(
+            v.number(messages.number),
+            v.integer(messages.integer),
+            v.minValue(1, messages.minIdValue)
+    )),
+    is_in_license: v.nullish(
+        v.boolean()
+    )
+});
+
+export function validateUpdateEmployeeData(employeeData: unknown) {
+    return v.parse(updatedEmployeeSchema, employeeData);
 }
