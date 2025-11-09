@@ -1,12 +1,10 @@
 import AppDataSource from "../db";
 import Client, { Receptor_type } from "../entities/Client";
-import User from "../entities/User";
 import { readCartService } from "../services/cart.services";
-import { MissingData, NotFound } from "../services/errorMessages";
+import { NotFound } from "../services/errorMessages";
 import { readInvoiceService } from "../services/invoice.services";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
-import CartRepository from "./cart.repository";
 import NationalityRepository from "./nationality.repository";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
@@ -102,7 +100,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .createQueryBuilder("cart")
         .relation(Client, "carts")
         .of(client)
-        .set(cart);
+        .add(cart);
     },
 
     async addInvoice(clientId: number, invoiceId: number): Promise<void> {
