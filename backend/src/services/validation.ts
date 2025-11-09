@@ -199,3 +199,17 @@ export type InvoiceValidated = v.InferOutput<typeof invoiceSchema>
 export function validateInvoiceData(invoiceData: unknown) {
     return v.parse(invoiceSchema, invoiceData);
 }
+
+const itemSchema = v.object({
+    quantity: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1)
+    )
+})
+
+export type ItemValidated = v.InferOutput<typeof itemSchema>;
+
+export function validateItemData(itemData: unknown) {
+    return v.parse(itemSchema, itemData);
+}
