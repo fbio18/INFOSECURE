@@ -47,9 +47,9 @@ export async function updateEmployeeController(req: Request, res: Response) {
         if (!req.params.id) throw new MissingData();
         const id = parseInt(req.params.id);
 
-        const employee = await updateEmployeeService(id, req.body);
+        const updatedEmployee = await updateEmployeeService(id, req.body);
 
-        res.send(employee);
+        res.send(updatedEmployee);
     } catch (error) {
         console.error(error);
         const errorResponse = createErrorResponse(error);
