@@ -60,3 +60,22 @@ const updateClientSchema = v.object({
 export function validateUpdateClientData(userData: unknown) {
     return v.parse(updateClientSchema, userData);
 }
+
+
+const MIN_PRODUCT_PRICE = 10000;
+const updateProductSchema = v.object({
+    name: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty)
+    )),
+    price: v.nullish(
+        v.pipe(
+            v.number(),
+            v.minValue(MIN_PRODUCT_PRICE)
+    ))
+})
+
+export function validateUpdatedProductData(productData: unknown) {
+    return v.parse(updateProductSchema, productData);
+}
