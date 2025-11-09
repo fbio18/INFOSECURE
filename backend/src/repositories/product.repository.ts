@@ -45,15 +45,15 @@ const ProductRepository = AppDataSource.getRepository(Product).extend({
         return products;
     },
 
-    async updateProduct() {
-        const updatedProduct = await this
-        .createQueryBuilder()
+    async updateProduct(productId: number, updatedProductData: Partial<Product>) {
+        await this
+        .createQueryBuilder("product")
         .update()
-        .set({})
-        .where({})
+        .set(updatedProductData)
+        .where("product_id = :productId", { productId })
         .execute();
 
-        if (!updatedProduct) throw new Error();
+        const updatedProduct = await this.readProduct(productId);
 
         return updatedProduct;
     },
