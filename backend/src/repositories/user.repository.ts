@@ -3,7 +3,7 @@ import User from "../entities/User";
 import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
 import { NotFound } from "../services/errorMessages";
-import { UpdateUserValidated, UserValidated } from "../services/validation";
+import { UserValidated } from "../services/validation";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
     async createUser(userData: UserValidated, hashedPassword: string) {
