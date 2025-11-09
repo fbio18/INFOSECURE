@@ -67,10 +67,10 @@ export function validateUserData(userData: unknown) {
     return v.parse(userSchema, userData);
 }
 
-function validateInvoiceType(receptorType: string): boolean {
-    const validReceptorTypes = ["A", "B", "C", "E", "M", "T"];
+function validateReceptorType(receptorType: string): boolean {
+    const allowedReceptorTypes = ["consumidor-final", "monotributista", "responsable-inscripto", "exportacion", "turista-extranjero"];
 
-    if (!validReceptorTypes.includes(receptorType)) return false;
+    if (!allowedReceptorTypes.includes(receptorType)) return false;
 
     return true;
 }
@@ -88,8 +88,7 @@ const clientSchema = v.object({
     receptor_type: v.pipe(
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
-        v.length(1),
-        //v.check(validateInvoiceType, messages.invalidReceptorType)
+        v.check(validateReceptorType, messages.invalidReceptorType)
     ),
     nationality: v.pipe(
         v.number(messages.number),
@@ -102,6 +101,7 @@ const clientSchema = v.object({
         v.minValue(1, messages.minIdValue)
     )
 });
+
 
 export type ClientValidated = v.InferOutput<typeof clientSchema>;
 
@@ -166,10 +166,17 @@ const cartSchema = v.object({
 })
 
 export type CartValidated = v.InferOutput<typeof cartSchema>;
-type InvoiceTypeType = "A" | "B" | "C" | "E" | "M" | "T" ;
 
 export function validateCartData(cartData: unknown) {
     return v.parse(cartSchema, cartData);
+}
+
+function validateInvoiceType(receptorType: string): boolean {
+    const validReceptorTypes = ["A", "B", "C", "E", "M", "T"];
+
+    if (!validReceptorTypes.includes(receptorType)) return false;
+
+    return true;
 }
 
 const invoiceSchema = v.object({
