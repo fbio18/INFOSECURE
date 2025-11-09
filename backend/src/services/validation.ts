@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-const messages = {
+export const messages = {
     string: "Dato inválido: debe ser string",
     stringId: "El DNI debe ser de tipo string",
     nonEmpty: "Uno o más campos no están definidos",
@@ -25,7 +25,7 @@ export function validateBody(body: object) {
     return true;
 }
 
-function validateNumericString(str: string): boolean {
+export function validateNumericString(str: string): boolean {
     const validCharacters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
     for (const char of str) {
@@ -41,7 +41,7 @@ export function validateNumberId(id: unknown) {
     return v.parse(numberIdSchema, id);
 }
 
-const minPasswordLength = 8;
+export const MINPASSWORDLENGTH = 8;
 
 const userSchema = v.object({
     email: v.pipe(
@@ -52,13 +52,14 @@ const userSchema = v.object({
     password: v.pipe(
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
-        v.minLength(minPasswordLength)
+        v.minLength(MINPASSWORDLENGTH)
     ),
     username: v.pipe(
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
     )
 });
+
 
 export type UserValidated = v.InferOutput<typeof userSchema>;
 
