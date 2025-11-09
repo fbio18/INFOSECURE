@@ -10,6 +10,9 @@ export default class User extends BaseEntity {
     @Column()
     username: string;
 
+    @Column({ default: "user" })
+    role: "user" | "admin";
+
     @Column()
     email: string;
 
