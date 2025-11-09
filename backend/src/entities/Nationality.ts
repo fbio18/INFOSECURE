@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Column, BaseEntity, Entity } from "typeorm";
+import { PrimaryGeneratedColumn, Column, BaseEntity, Entity, OneToMany } from "typeorm";
+import Client from "./Client";
 
 @Entity()
 export default class Nationality extends BaseEntity {
@@ -7,4 +8,7 @@ export default class Nationality extends BaseEntity {
 
     @Column()
     name: string;
+
+    @OneToMany(() => Client, (client) => client.nationality)
+    clients: Client[];
 }
