@@ -52,7 +52,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .where("client.client_id = :clientId", { clientId })
         .getOne();
 
-        if (!client) throw new MissingData();
+        if (!client) throw new NotFound("client");
 
         return client;
     },
@@ -66,7 +66,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .leftJoinAndSelect("client.user", "user")
         .getMany();
 
-        if (!client) throw new MissingData();
+        if (!client) throw new NotFound("client");
 
         return client;
     },
