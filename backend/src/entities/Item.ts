@@ -13,11 +13,11 @@ export default class Item extends BaseEntity {
     @Column()
     product_id: number;
 
-    @ManyToOne(() => Cart, (cart) => cart.products)
-    cart: number;
+    @ManyToOne(() => Cart, (cart) => cart.items)
+    cart: Cart;
 
-    @ManyToOne(() => Product, (product) => product.item)
-    product: number;
+    @ManyToOne(() => Product, (product) => product.item) 
+    product: Product;
 
     @Column()
     quantity: number;
