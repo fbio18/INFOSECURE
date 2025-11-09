@@ -1,5 +1,5 @@
 import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from "typeorm";
-import Cart_Product from "./Cart_Product";
+import Item from "./Item";
 import Invoice_Product from "./Invoice_product";
 
 @Entity()
@@ -16,8 +16,8 @@ export default class Product extends BaseEntity {
     @CreateDateColumn()
     release_date: Date;
 
-    @OneToMany(() => Cart_Product, (cart_product) => cart_product.product)
-    cart_products: Cart_Product[];
+    @OneToMany(() => Item, (item) => item.product)
+    item: Item[];
 
     @OneToMany(() => Invoice_Product, (invoice_product) => invoice_product.product)
     invoice_products: Invoice_Product[];

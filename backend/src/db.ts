@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_PORT, DB_NAME } from "./db-config";
 import User from "./entities/User";
 import Cart from "./entities/Cart";
-import Cart_Product from "./entities/Cart_Product";
+import Item from "./entities/Item";
 import Client from "./entities/Client";
 import Product from "./entities/Product";
 import Invoice from "./entities/Invoice";
@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
     password: DB_PASSWORD,
     port: (<number>DB_PORT),
     database: DB_NAME,
-    entities: [User, Cart, Client, Product, Invoice, Role, Nationality, Employee, Invoice_Product, Cart_Product],
+    entities: [User, Cart, Client, Product, Invoice, Role, Nationality, Employee, Invoice_Product, Item],
     logging: true,
     synchronize: true,
     dropSchema: true
