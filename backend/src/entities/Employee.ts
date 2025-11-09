@@ -6,7 +6,7 @@ export default class Employee extends BaseEntity {
     @PrimaryGeneratedColumn()
     employee_id: number;
 
-    @Column()
+    @Column({ unique: true })
     dni: string;
 
     @Column()
