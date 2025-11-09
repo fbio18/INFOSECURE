@@ -168,17 +168,8 @@ overflow: hidden;
   color: aliceblue;
 }
 
-#logofooter{
-  max-width: 210px;
-text-align: center;
-}
-#contacto{
-  margin-left: 80px;
-}
-#sobrenosotros
-{
-  margin-left: 80px;
-}
+
+
 
 .btn--descargar {
   background-color: #0078d0;
@@ -295,6 +286,7 @@ scale: 1;
   background-color: #0a0a0a;
   color: #eee;
   padding: 2rem 1rem;
+  
 }
 
 .footer-container {
