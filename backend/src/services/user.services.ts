@@ -1,6 +1,6 @@
 import User from "../entities/User";
 import UserRepository from "../repositories/user.repository";
-import { validateNumberId, validateUserData } from "./validation";
+import { UpdateUserValidated, validateNumberId, validateUpdateUserData, validateUserData } from "./validation";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "../config";
 import { InvalidData, InvalidId } from "./errorMessages";
@@ -24,10 +24,15 @@ export async function readsAllUsersService() {
     return await UserRepository.readAllUsers();
 }
 
-export async function updateUserService(updatedUserData: User) {
-    if (!validateUserData(updatedUserData)) throw new Error();
+export async function updateUserService(userId: number, updatedUserData: Partial<User>) {
+    if (!validateNumberId(userId)) throw new InvalidId("number");
 
-    await UserRepository.updateUser();
+    if ((updatedUserData as any).user_id) throw new InvalidData();
+    
+    // No sé si esté bien hacerlo así
+    if(!validateUpdateUserData(updatedUserData)) throw new InvalidData();
+
+    return await UserRepository.updateUser(userId, updatedUserData);
 }
 
 export async function deleteUserService(userId: number) {

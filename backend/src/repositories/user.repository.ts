@@ -3,7 +3,7 @@ import User from "../entities/User";
 import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
 import { NotFound } from "../services/errorMessages";
-import { UserValidated } from "../services/validation";
+import { UpdateUserValidated, UserValidated } from "../services/validation";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
     async createUser(userData: UserValidated, hashedPassword: string) {
@@ -48,18 +48,17 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         return users;
     },
 
-    async updateUser() {
-        const updatedUser = await this
+    async updateUser(userId: number, updatedUserData: Partial<User>): Promise<User> {
+        await this
         .createQueryBuilder()
         .update()
-        .set({})
-        .where({})
+        .set(updatedUserData)
+        .where("user_id = :userId", { userId })
         .execute();
 
-        if (!updatedUser) throw new Error();
+        const updatedUser = await this.readUser(userId);
 
         return updatedUser;
-
     },
 
     async deleteUser(userId: number) {

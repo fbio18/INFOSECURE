@@ -28,6 +28,8 @@ export async function readUserController(req: Request, res: Response) {
         res.send(user);
     } catch (error) {
         console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
     }
 }
 
@@ -38,11 +40,25 @@ export async function readAllUsersController(req: Request, res: Response) {
         res.send(users);
     } catch (error) {
         console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
     }
 }
 
 export async function updateUserController(req: Request, res: Response) {
+    try {
+        if (!req.params.id) throw new MissingData();
+        if (!validateBody(req.body)) throw new InvalidBody();
 
+        const id = parseInt(req.params.id);
+        const updatedUser = await updateUserService(id, req.body);
+
+        res.status(201).send(updatedUser);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
 }
 
 export async function deleteUserController(req: Request, res: Response) {
