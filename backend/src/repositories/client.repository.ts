@@ -75,7 +75,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         await this
         .createQueryBuilder()
         .update()
-        .set({})
+        .set(clientData)
         .where({ client_id: clientId })
         .execute();
 
