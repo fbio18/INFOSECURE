@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, OneToOne, JoinTable, ManyToMany, OneToMany, ManyToOne } from "typeorm";
+import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, OneToOne, OneToMany, ManyToOne } from "typeorm";
 import Nationality from "./Nationality";
 import Cart from "./Cart";
 import User from "./User";
@@ -23,7 +23,7 @@ export default class Client extends BaseEntity {
     @ManyToOne(() => Nationality, (nationality) => nationality.clients)
     nationality: Nationality;
 
-    @ManyToOne(() => Cart, (cart) => cart.client)
+    @OneToMany(() => Cart, (cart) => cart.client)
     carts: Cart[];
 
     @OneToOne(() => User, (user) => user.client)
