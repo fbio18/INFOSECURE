@@ -49,7 +49,7 @@ export function createErrorResponse(error: any): { message: string, statusCode: 
 
 export class NotFound extends Error {
     constructor(
-        public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee" | "nationality",
+        public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee" | "nationality" | "item",
         private _statusCode?: number
     ) {
         super();
