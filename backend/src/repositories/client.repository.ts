@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import Client, { Receptor_type } from "../entities/Client";
+import User from "../entities/User";
 import { readCartService } from "../services/cart.services";
 import { MissingData, NotFound } from "../services/errorMessages";
 import { readInvoiceService } from "../services/invoice.services";
@@ -12,17 +13,22 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         const user = await readUserService(clientData.user);
         const nationality = await NationalityRepository.readNationality(clientData.nationality);
 
-        await this
+        const newClient = await this
         .createQueryBuilder("client")
         .insert()
         .values({
             business_name: clientData.business_name,
             phone_number: clientData.phone_number,
             receptor_type: clientData.receptor_type as Receptor_type,
-            user: user,
             nationality: nationality
         })
         .execute();
+
+//        await this
+//        .createQueryBuilder("client")
+//        .relation(User, "client")
+//        .of(user)
+//        .add(newClient);
 
         const returnedClient = await this
         .createQueryBuilder("client")
@@ -53,7 +59,7 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
 
     async readAllClients(): Promise<Client[]> {
         const client = await this
-        .createQueryBuilder()
+        .createQueryBuilder("client")
         .leftJoinAndSelect("client.carts", "carts")
         .leftJoinAndSelect("client.nationality", "nationalities")
         .leftJoinAndSelect("client.invoices", "invoices")
@@ -65,15 +71,15 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         return client;
     },
 
-    async updateClient(clientId: number) {
-        const updatedClient = await this
+    async updateClient(clientId: number, clientData: Partial<Client>): Promise<Client> {
+        await this
         .createQueryBuilder()
         .update()
         .set({})
         .where({ client_id: clientId })
         .execute();
 
-        if (!updatedClient) throw new Error();
+        const updatedClient = await this.readClient(clientId);
 
         return updatedClient;
     },
