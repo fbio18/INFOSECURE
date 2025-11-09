@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateBody } from "../services/validation";
 import { createErrorResponse, InvalidBody, MissingData } from "../services/errorMessages";
-import { createEmployeeService, readAllEmployeesService, readEmployeeService } from "../services/employee.services";
+import { createEmployeeService, readAllEmployeesService, readEmployeeService, updateEmployeeService } from "../services/employee.services";
 
 export async function createEmployeeController(req: Request, res: Response) {
     try {
@@ -9,7 +9,7 @@ export async function createEmployeeController(req: Request, res: Response) {
 
         const employee = await createEmployeeService(req.body);
 
-        res.send(employee);
+        res.status(201).send(employee);
     } catch (error) {
         console.error(error);
     }
@@ -43,6 +43,18 @@ export async function readAllEmployeesController(req: Request, res: Response) {
 }
 
 export async function updateEmployeeController(req: Request, res: Response) {
+    try {
+        if (!req.params.id) throw new MissingData();
+        const id = parseInt(req.params.id);
+
+        const employee = await updateEmployeeService(id, req.body);
+
+        res.send(employee);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
 
 }
 

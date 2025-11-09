@@ -1,5 +1,6 @@
 import AppDataSource from "../db";
 import Employee from "../entities/Employee";
+import { NotFound } from "../services/errorMessages";
 import { assignEmployeeRelationService, readUserService } from "../services/user.services";
 import { EmployeeValidated } from "../services/validation";
 
@@ -52,20 +53,20 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
         .leftJoinAndSelect("employee.user", "user")
         .getMany();
 
-        if (!employees) throw new Error();
+        if (!employees) throw new NotFound("employee");
 
         return employees;
     },
 
-    async updateEmployee() {
-        const updatedEmployee = await this
+    async updateEmployee(employeeId: number, updatedEmployeeData: Partial<Employee>): Promise<Employee> {
+        await this
         .createQueryBuilder()
         .update()
-        .set({})
-        .where({})
+        .set(updatedEmployeeData)
+        .where("employee_id = :employeeId", { employeeId })
         .execute();
 
-        if (!updatedEmployee) throw new Error();
+        const updatedEmployee = await this.readEmployee(employeeId);
 
         return updatedEmployee;
     },
