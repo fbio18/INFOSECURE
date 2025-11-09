@@ -7,11 +7,11 @@ export default class Item extends BaseEntity {
     @PrimaryGeneratedColumn()
     item_id: number;
 
-    @Column()
-    cart_id: number;
+    @Column({ nullable: true })
+    cartId: number;
 
-    @Column()
-    product_id: number;
+    @Column({ nullable: true })
+    productId: number;
 
     @ManyToOne(() => Cart, (cart) => cart.items)
     cart: Cart;
