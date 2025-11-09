@@ -125,7 +125,7 @@ export function validateProductData(productData: unknown) {
     return v.parse(productSchema, productData);
 }
 
-const minSalaryValue = 317800;
+export const MIN_SALARY = 317800;
 const employeeSchema = v.object({
     dni: v.pipe(
         v.string(messages.string),
@@ -142,7 +142,7 @@ const employeeSchema = v.object({
     ),
     salary: v.pipe(
         v.number(messages.number),
-        v.minValue(minSalaryValue, `El valor del salario no puede ser menor a ${minSalaryValue}`)
+        v.minValue(MIN_SALARY, `El valor del salario no puede ser menor a ${MIN_SALARY}`)
     ),
     user: v.pipe(
         v.number(messages.number),
