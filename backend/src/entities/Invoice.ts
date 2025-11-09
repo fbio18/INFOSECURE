@@ -1,4 +1,4 @@
-import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from "typeorm";
+import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from "typeorm";
 import Client from "./Client";
 import Invoice_Product from "./Invoice_product";
 
@@ -21,7 +21,7 @@ export default class Invoice extends BaseEntity {
     @Column({ length: 1 })
     invoice_type: TInvoice_type;
 
-    @OneToMany(() => Client, (client) => client.invoices)
+    @ManyToOne(() => Client, (client) => client.invoices)
     client: Client;
 
     @OneToMany(() => Invoice_Product, (invoice_product) => invoice_product.invoice)
