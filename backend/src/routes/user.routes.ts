@@ -6,7 +6,7 @@ const router = Router();
 router.post("/user", createUserController);
 router.get("/user/:id", readUserController);
 router.get("/user", readAllUsersController);
-router.put("/user", updateUserController);
+router.put("/user/:id", updateUserController);
 router.delete("/user", deleteUserController);
 
 export default router;
