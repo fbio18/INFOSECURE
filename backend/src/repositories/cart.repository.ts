@@ -100,6 +100,13 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
 
         // Retorna el resultado así para ahorrarme guardarme el carrito en memoria
         return await this.readCart(cartId);
+    },
+
+    async removeItem(cartId: number, productId: number, itemData: ItemValidated): Promise<Cart> {
+        await ItemRepository.removeItem(cartId, productId, itemData);
+
+        // Retorna el resultado así para ahorrarme guardarme el carrito en memoria
+        return await this.readCart(cartId);
     }
 })
 

@@ -38,6 +38,10 @@ export async function addItemService(cartId: number, productId: number, itemData
 
 }
 
-export async function deleteCartService(cartId: number) {
-    return await CartRepository.deleteCart(cartId);
+export async function removeItemService(cartId: number, productId: number, itemData: Partial<Item>): Promise<Cart> {
+    if (!validateNumberId(cartId) || !validateNumberId(productId)) throw new InvalidId("number");
+    
+    const validatedData: ItemValidated = validateItemData(itemData);
+
+    return await CartRepository.removeItem(cartId, productId, validatedData);
 }

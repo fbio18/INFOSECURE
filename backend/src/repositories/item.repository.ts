@@ -1,6 +1,6 @@
 import AppDataSource from "../db";
 import Item from "../entities/Item";
-import { NotFound } from "../services/errorMessages";
+import { CustomError, NotFound } from "../services/errorMessages";
 import { ItemValidated } from "../services/validation";
 import CartRepository from "./cart.repository";
 import ProductRepository from "./product.repository";
@@ -68,8 +68,6 @@ const ItemRepository = AppDataSource.getRepository(Item).extend({
         .orderBy("item.item_id", "DESC")
         .getOne();
         
-        console.log("CREATED ITEMMMMM: ", createdItem);
-
         await this
         .createQueryBuilder("item")
         .relation(Item, "cart")
@@ -85,7 +83,42 @@ const ItemRepository = AppDataSource.getRepository(Item).extend({
         return await this.readItem(cartId, productId);
     },
 
-    async removeItems(cartId: number, productId: number, itemData: ItemValidated) {
+    async removeItem(cartId: number, productId: number, itemData: ItemValidated): Promise<Item | null> {
+        // Es probable que deba mover esto a services
+        const item = await this
+        .createQueryBuilder("item")
+        .leftJoinAndSelect("item.cart", "cart")
+        .leftJoinAndSelect("item.product", "product")
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .getOne();
+
+        if (!item) throw new NotFound("item");
+
+        if (item.quantity - itemData.quantity < 0) throw new CustomError("No se pueden quitar tantos elementos", 404);
+
+        if (item.quantity === 1 && itemData.quantity === 1) {
+            await this
+            .createQueryBuilder()
+            .delete()
+            .where("cart.cart_id = :cartId", { cartId })
+            .andWhere("product.product_id = :productId", { productId })
+            .execute();
+
+            return null;
+        }
+
+        await this
+        .createQueryBuilder("item")
+        .update()
+        .set({ quantity: item.quantity - itemData.quantity })
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .execute();
+
+        const updatedItem = await this.readItem(cartId, productId);
+
+        return updatedItem;
     }
 })
 
