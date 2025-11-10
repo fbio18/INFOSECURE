@@ -105,12 +105,13 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
 
     async addInvoice(clientId: number, invoiceId: number): Promise<void> {
         const invoice = await readInvoiceService(invoiceId);
-
         const client = await this.readClient(clientId);
 
-        if (!client.invoices) client.invoices = [];
-
-        client.invoices.push(invoice);
+        await this
+        .createQueryBuilder()
+        .relation(Client, "invoices")
+        .of(client)
+        .add(invoice);
     }
 })
 
