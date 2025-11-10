@@ -47,6 +47,18 @@ export function createErrorResponse(error: any): { message: string, statusCode: 
     return { message: error.message, statusCode: error.statusCode as number };
 }
 
+export class CustomError extends Error {
+    constructor(message: string, public statusCode: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, CustomError);
+
+        this.name = "CustomError";
+        this.message = message;
+        this.statusCode = statusCode;
+    }
+}
+
 export class NotFound extends Error {
     constructor(
         public entity: "user" | "invoice" | "client" | "product" | "cart" | "role" | "employee" | "nationality" | "item",
@@ -67,7 +79,7 @@ export class NotFound extends Error {
 }
 
 export class InvalidId extends Error {
-    constructor(public idType: "number" | "string", private _statusCode?: number) {
+    constructor(public idType: "number" | "string" = "number", private _statusCode?: number) {
         super();
 
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
