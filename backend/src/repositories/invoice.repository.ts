@@ -3,11 +3,13 @@ import Invoice, { TInvoice_type } from "../entities/Invoice";
 import { readClientService } from "../services/client.services";
 import { NotFound } from "../services/errorMessages";
 import { InvoiceValidated } from "../services/validation";
+import CartRepository from "./cart.repository";
 import ClientRepository from "./client.repository";
 
 const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
     async createInvoice(invoiceData: InvoiceValidated) {
-        const client = await readClientService(invoiceData.client);
+        const client = await readClientService(invoiceData.clientId);
+        const cart = await CartRepository.readCart(invoiceData.cartId);
 
         await this
         .createQueryBuilder("invoice")
@@ -15,7 +17,6 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         .values({
             total_amount: invoiceData.total_amount,
             invoice_type: invoiceData.invoice_type as TInvoice_type,
-            client: client
         })
         .execute();
 
@@ -26,16 +27,28 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
 
         if (!returnedInvoice) throw new Error();
 
-        await ClientRepository.addInvoice(invoiceData.client, returnedInvoice.order_number);
+        await this
+        .createQueryBuilder()
+        .relation(Invoice, "client")
+        .of(returnedInvoice)
+        .set(client);
 
-        return returnedInvoice;
+        await this
+        .createQueryBuilder()
+        .relation(Invoice, "cart")
+        .of(returnedInvoice)
+        .set(cart);
+
+        await ClientRepository.addInvoice(invoiceData.clientId, returnedInvoice.order_number);
+
+        return await this.readInvoice(returnedInvoice.order_number);
     },
 
     async readInvoice(invoiceId: number) {
         const invoice = await this
         .createQueryBuilder("invoice")
         .leftJoinAndSelect("invoice.client", "client")
-        .leftJoinAndSelect("invoice.products", "products")
+        .leftJoinAndSelect("invoice.cart", "cart")
         .where("invoice.order_number= :invoiceId", { invoiceId })
         .getOne();
 
@@ -48,7 +61,7 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         const invoices = await this
         .createQueryBuilder()
         .leftJoinAndSelect("invoice.client", "client")
-        .leftJoinAndSelect("invoice.products", "products")
+        .leftJoinAndSelect("invoice.cart", "cart")
         .getMany();
 
         if (!invoices) throw new NotFound("invoice");
@@ -56,14 +69,17 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         return invoices;
     },
 
-    async updateInvoice() {
-        const invoices = await this
+    async updateInvoice(invoiceId: number, updatedInvoiceData: Partial<Invoice>): Promise<Invoice> {
+        await this
         .createQueryBuilder()
-        .getMany();
+        .update()
+        .set(updatedInvoiceData)
+        .where("user_id = :userId", { invoiceId })
+        .execute();
 
-        if (!invoices) throw new Error();
+        const updatedInvoice = await this.readInvoice(invoiceId);
 
-        return invoices;
+        return updatedInvoice;
     },
 
     async deleteInvoice(invoiceId: number) {
