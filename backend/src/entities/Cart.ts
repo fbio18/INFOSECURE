@@ -1,6 +1,7 @@
-import { CreateDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, UpdateDateColumn, Column } from "typeorm";
+import { CreateDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, UpdateDateColumn, Column, OneToOne } from "typeorm";
 import Item from "./Item";
 import Client from "./Client";
+import Invoice from "./Invoice";
 
 @Entity()
 export default class Cart extends BaseEntity {
@@ -21,4 +22,7 @@ export default class Cart extends BaseEntity {
 
     @OneToMany(() => Item, (item) => item.cart)
     items: Item[];
+
+    @OneToOne(() => Invoice, (invoice) => invoice.cart)
+    invoice: Invoice;
 }

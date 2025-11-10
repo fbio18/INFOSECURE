@@ -1,6 +1,6 @@
-import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from "typeorm";
+import { Column, Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 import Client from "./Client";
-import Invoice_Product from "./Invoice_product";
+import Cart from "./Cart";
 
 export type TInvoice_type = "A" | "B" | "C" | "E" | "M" | "T";
 
@@ -24,6 +24,7 @@ export default class Invoice extends BaseEntity {
     @ManyToOne(() => Client, (client) => client.invoices)
     client: Client;
 
-    @OneToMany(() => Invoice_Product, (invoice_product) => invoice_product.invoice)
-    products: Invoice_Product[];
+    @OneToOne(() => Cart, (cart) => cart.invoice)
+    @JoinColumn()
+    cart: Cart;
 }
