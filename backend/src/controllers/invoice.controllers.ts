@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateBody } from "../services/validation";
 import { createErrorResponse, InvalidBody, MissingData } from "../services/errorMessages";
-import { createInvoiceService, readAllInvoicesService, readInvoiceService } from "../services/invoice.services";
+import { createInvoiceService, readAllInvoicesService, readInvoiceService, updateInvoiceService } from "../services/invoice.services";
 
 export async function createInvoiceController(req: Request, res: Response) {
     try {
@@ -44,7 +44,20 @@ export async function readAllInvoicesController(req: Request, res: Response) {
 }
 
 export async function updateInvoiceController(req: Request, res: Response) {
+    try {
+        if (!req.params.id) throw new MissingData();
+        if (!req.body) throw new InvalidBody();
 
+        const id = parseInt(req.params.id);
+
+        const updatedInvoice = await updateInvoiceService(id, req.body);
+
+        res.send(updatedInvoice);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
 }
 
 export async function deleteInvoiceController(req: Request, res: Response) {

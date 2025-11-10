@@ -6,7 +6,7 @@ const router = Router();
 router.post("/invoice", createInvoiceController);
 router.get("/invoice/:id", readInvoiceController);
 router.get("/invoice", readAllInvoicesController);
-router.put("/invoice", updateInvoiceController);
+router.put("/invoice/:id", updateInvoiceController);
 router.delete("/invoice", deleteInvoiceController);
 
 export default router;
