@@ -171,7 +171,7 @@ export function validateCartData(cartData: unknown) {
     return v.parse(cartSchema, cartData);
 }
 
-function validateInvoiceType(receptorType: string): boolean {
+export function validateInvoiceType(receptorType: string): boolean {
     const validReceptorTypes = ["A", "B", "C", "E", "M", "T"];
 
     if (!validReceptorTypes.includes(receptorType)) return false;
@@ -184,7 +184,7 @@ const invoiceSchema = v.object({
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
     ),
-    client: v.pipe(
+    clientId: v.pipe(
         v.number(messages.number),
         v.integer(messages.integer),
         v.minValue(1, messages.minIdValue)
@@ -198,6 +198,11 @@ const invoiceSchema = v.object({
         v.nonEmpty(messages.nonEmpty),
         v.length(1),
         v.check(validateInvoiceType, messages.invalidInvoiceType)
+    ),
+    cartId: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
     )
 });
 
