@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { messages, MIN_SALARY, MINPASSWORDLENGTH, validateNumericString } from "./validation";
+import { messages, MIN_SALARY, MINPASSWORDLENGTH, validateInvoiceType, validateNumericString } from "./validation";
 
 const updateUserSchema = v.object({
     email: v.nullish(
@@ -129,4 +129,33 @@ const updateCartSchema = v.object({
 
 export function validateUpdateCartData(cartData: unknown) {
     return v.parse(updateCartSchema, cartData);
+}
+
+const invoiceSchema = v.object({
+    emitter: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+    )),
+    client: v.nullish(
+        v.pipe(
+            v.number(messages.number),
+            v.integer(messages.integer),
+            v.minValue(1, messages.minIdValue)
+    )),
+    total_amount: v.nullish(
+        v.pipe(
+            v.number(messages.number),
+    )),
+    invoice_type: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+            v.length(1),
+            v.check(validateInvoiceType, messages.invalidInvoiceType)
+    ))
+});
+
+export function validateUpdateInvoiceData(invoiceData: unknown) {
+    return v.parse(invoiceSchema, invoiceData);
 }
