@@ -2,6 +2,7 @@ import AppDataSource from "../db";
 import Product from "../entities/Product";
 import { NotFound } from "../services/errorMessages";
 import { ProductValidated } from "../services/validation";
+import ItemRepository from "./item.repository";
 
 const ProductRepository = AppDataSource.getRepository(Product).extend({
     async createProduct(productData: ProductValidated): Promise<Product> {
@@ -58,12 +59,16 @@ const ProductRepository = AppDataSource.getRepository(Product).extend({
         return updatedProduct;
     },
 
-    async deleteProduct(productId: number) {
+    async deleteProduct(productId: number): Promise<{ message: string }> {
+        await ItemRepository.unAssignProductRelation(productId);
+
         await this
         .createQueryBuilder("product")
         .delete()
-        .where("product.id = :productId", { productId })
+        .where("product_id = :productId", { productId })
         .execute();
+
+        return { message: "El producto fue eliminado con éxito" };
     }
 })
 

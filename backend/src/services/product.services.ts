@@ -28,6 +28,8 @@ export async function updateProductService(productId: number, updatedProductData
     return await ProductRepository.updateProduct(productId, updatedProductData);
 }
 
-export async function deleteProductService(productId: number) {
+export async function deleteProductService(productId: number): Promise<{ message: string }> {
+    if (!validateNumberId(productId)) throw new InvalidId();
+
     return await ProductRepository.deleteProduct(productId);
 }

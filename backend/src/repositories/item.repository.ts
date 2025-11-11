@@ -27,6 +27,14 @@ const ItemRepository = AppDataSource.getRepository(Item).extend({
         return item;
     },
 
+    async unAssignProductRelation(productId: number) {
+        await this
+        .createQueryBuilder()
+        .delete()
+        .where("product.product_id = :productId", { productId })
+        .execute();
+    },
+
     async addItems(cartId: number, productId: number, itemData: ItemValidated): Promise<Item> {
         const item = await this
         .createQueryBuilder("item")
