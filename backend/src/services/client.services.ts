@@ -27,8 +27,10 @@ export async function updateClientService(clientId: number, clientData: Partial<
     return await ClientRepository.updateClient(clientId, clientData);
 }
 
-export async function deleteClientService(clientId: number) {
-    await ClientRepository.deleteClient(clientId);
+export async function deleteClientService(clientId: number): Promise<{ message: string, statusCode: number }> {
+    if (!validateNumberId(clientId)) throw new InvalidId();
+
+    return await ClientRepository.deleteClient(clientId);
 }
 
 export async function assignCartRelationService(clientId: number, cartId: number) {

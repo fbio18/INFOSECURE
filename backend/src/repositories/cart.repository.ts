@@ -95,6 +95,16 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
         .set(client);
     },
 
+    async deleteCartsFromClient(clientId: number): Promise<void> {
+        await ItemRepository.deleteCartItemsFromClient(clientId);
+
+        await this
+        .createQueryBuilder()
+        .delete()
+        .where("client.client_id = :clientId", { clientId })
+        .execute();
+    },
+
     async addItem(cartId: number, productId: number, itemData: ItemValidated): Promise<Cart> {
         await ItemRepository.addItems(cartId, productId, itemData);
 

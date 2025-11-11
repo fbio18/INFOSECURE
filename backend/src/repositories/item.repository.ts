@@ -3,6 +3,7 @@ import Item from "../entities/Item";
 import { CustomError, NotFound } from "../services/errorMessages";
 import { ItemValidated } from "../services/validation";
 import CartRepository from "./cart.repository";
+import ClientRepository from "./client.repository";
 import ProductRepository from "./product.repository";
 
 const ItemRepository = AppDataSource.getRepository(Item).extend({
@@ -33,6 +34,23 @@ const ItemRepository = AppDataSource.getRepository(Item).extend({
         .delete()
         .where("product.product_id = :productId", { productId })
         .execute();
+    },
+
+    async deleteCartItemsFromClient(clientId: number): Promise<void> {
+        const client = await ClientRepository.readClient(clientId);
+
+        let cartIds = [];
+        for (const cart of client.carts) {
+            cartIds.push(cart.cart_id);
+        }
+
+        for (const cartId of cartIds) {
+            await this
+            .createQueryBuilder()
+            .delete()
+            .where("cart.cart_id = :cartId", { cartId })
+            .execute();
+        }
     },
 
     async addItems(cartId: number, productId: number, itemData: ItemValidated): Promise<Item> {

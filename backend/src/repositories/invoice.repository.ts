@@ -69,6 +69,19 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         return invoices;
     },
 
+    async readByClientId(clientId: number): Promise<Invoice[]> {
+        const invoices = await this
+        .createQueryBuilder("invoice")
+        .leftJoinAndSelect("invoice.client", "client")
+        .leftJoinAndSelect("invoice.cart", "cart")
+        .where("client.client_id = :clientId", { clientId })
+        .getMany();
+
+        if (!invoices) throw new NotFound("invoice");
+
+        return invoices;
+    },
+
     async updateInvoice(invoiceId: number, updatedInvoiceData: Partial<Invoice>): Promise<Invoice> {
         await this
         .createQueryBuilder()
@@ -87,6 +100,30 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         .createQueryBuilder("invoice")
         .delete()
         .where("invoice.order_number= :invoiceId", { invoiceId })
+        .execute();
+    },
+
+    async deleteAllInvoicesFromClient(clientId: number): Promise<void> {
+        const invoices = await this.readByClientId(clientId);
+
+        for (const invoice of invoices) {
+            await this
+            .createQueryBuilder()
+            .relation(Invoice, "client")
+            .of(invoice)
+            .set(null)
+
+            await this
+            .createQueryBuilder()
+            .relation(Invoice, "cart")
+            .of(invoice)
+            .set(null);
+        }
+
+        await this
+        .createQueryBuilder()
+        .delete()
+        .where("client.client_id = :clientId", { clientId })
         .execute();
     }
 })

@@ -97,6 +97,20 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .where("user_id = :userId", { userId })
         .execute();
     },
+
+    async unassignClientRelation(clientId: number): Promise<void> {
+        const user = await this
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.client", "client")
+        .where("client.client_id = :clientId", { clientId })
+        .getOne();
+
+        await this
+        .createQueryBuilder()
+        .relation(User, "client")
+        .of(user)
+        .set(null)
+    }
 })
 
 export default UserRepository;

@@ -5,7 +5,10 @@ import { NotFound } from "../services/errorMessages";
 import { readInvoiceService } from "../services/invoice.services";
 import { assignClientRelationService, readUserService } from "../services/user.services";
 import { ClientValidated } from "../services/validation";
+import CartRepository from "./cart.repository";
+import InvoiceRepository from "./invoice.repository";
 import NationalityRepository from "./nationality.repository";
+import UserRepository from "./user.repository";
 
 const ClientRepository = AppDataSource.getRepository(Client).extend({
     async createClient(clientData: ClientValidated) {
@@ -83,12 +86,18 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         return updatedClient;
     },
 
-    async deleteClient(clientId: number) {
+    async deleteClient(clientId: number): Promise<{ message: string, statusCode: number }> {
+        await InvoiceRepository.deleteAllInvoicesFromClient(clientId);
+        await UserRepository.unassignClientRelation(clientId);
+        await CartRepository.deleteCartsFromClient(clientId);
+
         await this
         .createQueryBuilder("client")
         .delete()
-        .where("client.client_id", { clientId })
+        .where("client_id = :clientId", { clientId })
         .execute();
+
+        return { message: "El cliente fue borrado con éxito", statusCode: 200 }
     },
 
     async assignCartRelation(clientId: number, cartId: number) {
@@ -112,6 +121,14 @@ const ClientRepository = AppDataSource.getRepository(Client).extend({
         .relation(Client, "invoices")
         .of(client)
         .add(invoice);
+    },
+
+    async unassignUserRelation(userId: number): Promise<void> {
+        await this
+        .createQueryBuilder()
+        .delete()
+        .where("user.user_id = :userId", { userId})
+        .execute();
     }
 })
 
