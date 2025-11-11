@@ -36,10 +36,10 @@ export async function updateUserService(userId: number, updatedUserData: Partial
     return await UserRepository.updateUser(userId, updatedUserData);
 }
 
-export async function deleteUserService(userId: number) {
+export async function deleteUserService(userId: number): Promise<{ message: string }> {
     if (!validateNumberId(userId)) throw new InvalidId("number");
 
-    await UserRepository.deleteUser(userId);
+    return await UserRepository.deleteUser(userId);
 }
 
 export async function assignEmployeeRelationService(userId: number, employeeId: number) {

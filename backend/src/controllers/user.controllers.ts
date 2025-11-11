@@ -62,5 +62,17 @@ export async function updateUserController(req: Request, res: Response) {
 }
 
 export async function deleteUserController(req: Request, res: Response) {
+    try {
+        if (!req.params.id) throw new MissingData();
+        const id = parseInt(req.params.id);
+
+        const deletedUserResult = await deleteUserService(id);
+        
+        res.send(deletedUserResult);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
 
 }

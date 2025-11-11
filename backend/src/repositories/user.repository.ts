@@ -61,12 +61,14 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         return updatedUser;
     },
 
-    async deleteUser(userId: number) {
+    async deleteUser(userId: number): Promise<{ message: string }> {
         await this
         .createQueryBuilder("user")
         .delete()
-        .where("user.user_id = :userId", { userId })
+        .where("user_id = :userId", { userId })
         .execute();
+
+        return { message: "El usuario fue eliminado con éxito" }
     },
 
     async assignEmployeeRelation(userId: number, employeeId: number) {
