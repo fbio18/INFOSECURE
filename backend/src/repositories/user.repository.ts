@@ -4,6 +4,8 @@ import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
 import { NotFound } from "../services/errorMessages";
 import { UserValidated } from "../services/validation";
+import ClientRepository from "./client.repository";
+import EmployeeRepository from "./employee.repository";
 
 const UserRepository = AppDataSource.getRepository(User).extend({
     async createUser(userData: UserValidated, hashedPassword: string) {
@@ -61,14 +63,17 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         return updatedUser;
     },
 
-    async deleteUser(userId: number): Promise<{ message: string }> {
+    async deleteUser(userId: number): Promise<{ message: string, statusCode: number }> {
+        await EmployeeRepository.unassignUserRelation(userId);
+        await ClientRepository.unassignUserRelation(userId);
+
         await this
         .createQueryBuilder("user")
         .delete()
         .where("user_id = :userId", { userId })
         .execute();
 
-        return { message: "El usuario fue eliminado con éxito" }
+        return { message: "El usuario fue eliminado con éxito", statusCode: 200 }
     },
 
     async assignEmployeeRelation(userId: number, employeeId: number) {
@@ -91,7 +96,7 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .set({ client: client })
         .where("user_id = :userId", { userId })
         .execute();
-    }
+    },
 })
 
 export default UserRepository;

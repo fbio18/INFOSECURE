@@ -36,7 +36,7 @@ export async function updateUserService(userId: number, updatedUserData: Partial
     return await UserRepository.updateUser(userId, updatedUserData);
 }
 
-export async function deleteUserService(userId: number): Promise<{ message: string }> {
+export async function deleteUserService(userId: number): Promise<{ message: string, statusCode: number }> {
     if (!validateNumberId(userId)) throw new InvalidId("number");
 
     return await UserRepository.deleteUser(userId);
