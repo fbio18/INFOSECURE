@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateBody } from "../services/validation";
 import { createErrorResponse, InvalidBody, MissingData } from "../services/errorMessages";
-import { createEmployeeService, readAllEmployeesService, readEmployeeService, updateEmployeeService } from "../services/employee.services";
+import { createEmployeeService, deleteEmployeeService, readAllEmployeesService, readEmployeeService, updateEmployeeService } from "../services/employee.services";
 
 export async function createEmployeeController(req: Request, res: Response) {
     try {
@@ -55,9 +55,20 @@ export async function updateEmployeeController(req: Request, res: Response) {
         const errorResponse = createErrorResponse(error);
         res.status(errorResponse.statusCode).send(errorResponse);
     }
-
 }
 
 export async function deleteEmployeeController(req: Request, res: Response) {
+    try {
+        if (!req.params.id) throw new MissingData();
+        const id = parseInt(req.params.id);
+
+        const deletedEmployeeResult = await deleteEmployeeService(id);
+
+        res.send(deletedEmployeeResult);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
 
 }

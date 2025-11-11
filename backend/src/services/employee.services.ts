@@ -27,6 +27,8 @@ export async function updateEmployeeService(employeeId: number, employeeUpdatedD
     return await EmployeeRepository.updateEmployee(employeeId, employeeUpdatedData);
 }
 
-export async function deleteEmployeeService(employeeId: number) {
-    await EmployeeRepository.deleteEmployee(employeeId);
+export async function deleteEmployeeService(employeeId: number): Promise<{ message: string, statusCode: number }> {
+    if (!validateNumberId(employeeId)) throw new InvalidId();
+
+    return await EmployeeRepository.deleteEmployee(employeeId);
 }

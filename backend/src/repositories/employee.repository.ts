@@ -3,6 +3,7 @@ import Employee from "../entities/Employee";
 import { NotFound } from "../services/errorMessages";
 import { assignEmployeeRelationService, readUserService } from "../services/user.services";
 import { EmployeeValidated } from "../services/validation";
+import UserRepository from "./user.repository";
 
 // Las validaciones de los datos se hacen en el módulo de servicios. No cambiar los "as [tipo]"
 
@@ -49,7 +50,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
 
     async readAllEmployees(): Promise<Employee[]> {
         const employees = await this
-        .createQueryBuilder()
+        .createQueryBuilder("employee")
         .leftJoinAndSelect("employee.user", "user")
         .getMany();
 
@@ -71,13 +72,17 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
         return updatedEmployee;
     },
 
-    async deleteEmployee(employeeId: number) {
+    async deleteEmployee(employeeId: number): Promise<{ message: string, statusCode: number }> {
+        await UserRepository.unassignEmployeeRelation(employeeId);
+
         await this
         .createQueryBuilder("employee")
         .delete()
         .where("employee.employee_id = :employeeId", { employeeId })
         .execute();
-    }
+
+        return { message: "El empleado fue borrado con éxito", statusCode: 200 };
+    },
 })
 
 export default EmployeeRepository;

@@ -87,6 +87,20 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .execute();
     },
 
+    async unassignEmployeeRelation(employeeId: number): Promise<void> {
+        const user = await this
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.employee", "employee")
+        .where("employee.employee_id = :employeeId", { employeeId })
+        .getOne();
+
+        await this
+        .createQueryBuilder()
+        .relation(User, "employee")
+        .of(user)
+        .set(null);
+    },
+
     async assignClientRelation(userId: number, clientId: number) {
         const client = await readClientService(clientId);
 
