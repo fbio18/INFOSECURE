@@ -123,6 +123,14 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
         await this.updateCart(cartId, { is_active: false });
 
         await this.createCart({ client: clientId });
+    },
+
+    async loadCartItems(cartId: number): Promise<any[]> {
+        return await this
+        .createQueryBuilder()
+        .relation(Cart, "items")
+        .of(cartId)
+        .loadMany();
     }
 
 })
