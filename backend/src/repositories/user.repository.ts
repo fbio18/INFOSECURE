@@ -12,8 +12,7 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         await this
         .createQueryBuilder("product")
         .insert()
-        .values({
-            email: userData.email,
+        .values({ email: userData.email,
             password: hashedPassword,
             username: userData.username
         })
@@ -48,6 +47,34 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         if (!users) throw new NotFound("user");
 
         return users;
+    },
+
+    async readUserPassword(userId: number): Promise<Partial<User>> {
+        const userPassword = await this
+        .createQueryBuilder()
+        .select("user.password", "password")
+        .where("user.user_id = :userId", { userId })
+        .getOne();
+
+        if (!userPassword) throw new NotFound("user");
+
+        return userPassword;
+    },
+
+    async readUserForLogin(userUsername: string): Promise<Partial<User>> {
+        const user = await this
+        .createQueryBuilder("user")
+        .select("user.username")
+        .addSelect("user.password")
+        .addSelect("user.user_id")
+        .where("user.username = :userUsername", { userUsername })
+        .getOne();
+
+        console.log(user);
+
+        if (!user) throw new NotFound("user");
+
+        return user;
     },
 
     async updateUser(userId: number, updatedUserData: Partial<User>): Promise<User> {
