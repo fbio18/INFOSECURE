@@ -1,0 +1,151 @@
+import AppDataSource from "../db";
+import Item from "../entities/Item";
+import { CustomError, NotFound } from "../services/errorMessages";
+import { ItemValidated } from "../services/validation";
+import CartRepository from "./cart.repository";
+import ClientRepository from "./client.repository";
+import ProductRepository from "./product.repository";
+
+const ItemRepository = AppDataSource.getRepository(Item).extend({
+    async readItem(cartId: number, productId: number): Promise<Item> {
+        // Esta validación quizá la debería mover al service
+        const item = await this
+        .createQueryBuilder("item")
+        .leftJoinAndSelect("item.cart", "cart")
+        .leftJoinAndSelect("item.product", "product")
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .getOne();
+
+        await this
+        .createQueryBuilder()
+        .relation(Item, "cart")
+        .of(item)
+        .loadOne()
+
+        if (!item) throw new NotFound("item");
+
+        return item;
+    },
+
+    async unAssignProductRelation(productId: number) {
+        await this
+        .createQueryBuilder()
+        .delete()
+        .where("product.product_id = :productId", { productId })
+        .execute();
+    },
+
+    async deleteCartItemsFromClient(clientId: number): Promise<void> {
+        const client = await ClientRepository.readClient(clientId);
+
+        let cartIds = [];
+        for (const cart of client.carts) {
+            cartIds.push(cart.cart_id);
+        }
+
+        for (const cartId of cartIds) {
+            await this
+            .createQueryBuilder()
+            .delete()
+            .where("cart.cart_id = :cartId", { cartId })
+            .execute();
+        }
+    },
+
+    async addItems(cartId: number, productId: number, itemData: ItemValidated): Promise<Item> {
+        const item = await this
+        .createQueryBuilder("item")
+        .leftJoinAndSelect("item.cart", "cart")
+        .leftJoinAndSelect("item.product", "product")
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .getOne();
+
+
+        if (item) {
+            await this
+            .createQueryBuilder("item")
+            .update()
+            .set({ quantity: item.quantity + itemData.quantity })
+            .where("cart.cart_id = :cartId", { cartId })
+            .andWhere("product.product_id = :productId", { productId })
+            .execute();
+
+
+            const updatedItem = await this.readItem(cartId, productId);
+
+            return updatedItem;
+        }
+
+        const cart = await CartRepository.readCart(cartId);
+        const product = await ProductRepository.readProduct(productId);
+
+        await this
+        .createQueryBuilder("item")
+        .insert()
+        .values({
+            quantity: itemData.quantity
+        })
+        .execute()
+
+        const createdItem = await this
+        .createQueryBuilder("item")
+        .orderBy("item.item_id", "DESC")
+        .getOne();
+        
+        await this
+        .createQueryBuilder("item")
+        .relation(Item, "cart")
+        .of(createdItem)
+        .set(cart);
+
+        await this
+        .createQueryBuilder("item")
+        .relation(Item, "product")
+        .of(createdItem)
+        .set(product);
+
+        return await this.readItem(cartId, productId);
+    },
+
+    async removeItem(cartId: number, productId: number, itemData: ItemValidated): Promise<Item | null> {
+        // Es probable que deba mover esto a services
+        const item = await this
+        .createQueryBuilder("item")
+        .leftJoinAndSelect("item.cart", "cart")
+        .leftJoinAndSelect("item.product", "product")
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .getOne();
+
+        if (!item) throw new NotFound("item");
+
+        if (item.quantity - itemData.quantity < 0) throw new CustomError("No se pueden quitar tantos elementos", 404);
+
+        if (item.quantity === 1 && itemData.quantity === 1) {
+            await this
+            .createQueryBuilder()
+            .delete()
+            .where("cart.cart_id = :cartId", { cartId })
+            .andWhere("product.product_id = :productId", { productId })
+            .execute();
+
+            return null;
+        }
+
+        await this
+        .createQueryBuilder("item")
+        .update()
+        .set({ quantity: item.quantity - itemData.quantity })
+        .where("cart.cart_id = :cartId", { cartId })
+        .andWhere("product.product_id = :productId", { productId })
+        .execute();
+
+        const updatedItem = await this.readItem(cartId, productId);
+
+        return updatedItem;
+    }
+})
+
+export default ItemRepository;
