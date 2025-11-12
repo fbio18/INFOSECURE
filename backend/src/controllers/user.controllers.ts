@@ -13,7 +13,8 @@ export async function createUserController(req: Request, res: Response) {
         res.send(newUser);
     } catch (error) {
         console.error(error);
-        res.send(createErrorResponse(error));
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
     }
 }
 
