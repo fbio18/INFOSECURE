@@ -1,50 +1,9 @@
-import { ValiError } from "valibot";
-
-function addErrorMessage(errorType: string): { message: string, statusCode: number } {
-    switch (errorType) {
-        case "invalid-id":
-            return { message: "Por favor ingrese un id válido", statusCode: 400 };
-
-        case "invalid-number-id":
-            return { message: "Error de id numérico no válido", statusCode: 400 };
-
-        case "invalid-string-id":
-            return { message: "Error de id string no válido", statusCode: 400 };
-
-        case "not-found":
-            return { message: "El objeto solicitado no existe", statusCode: 404 };
-        
-        case "access-denied":
-            return { message: "Acceso denegado. Por favor inicie sesión", statusCode: 401 };
-
-        case "access-unauthorized":
-            return { message: "Acceso no autorizado", statusCode: 401 };
-            
-        case "empty-body":
-            return { message: "Al cuerpo de la petición le faltan uno o más datos", statusCode: 400 };
-
-        case "already-exists":
-            return { message: "El objeto que está intentando crear ya existe", statusCode: 409 };
-
-        case "query-builder-error":
-            return { message: "Hubo un error al ejecutar un query builder", statusCode: 500 };
-        
-        case "invalid-data":
-            return { message: "Los datos presentan una forma inválida", statusCode: 400 };
-
-        default:
-            return { message: errorType, statusCode: 500 }; // 500 para indicar que no se sabe qué codigo es
-    }
-}
-
 export function createErrorResponse(error: any): { message: string, statusCode: number } {
-    // No intercambiar el nombre de las condicionales. Sino el caso de ValiBot nunca entra
+    // No intercambiar el orden nombre de las condicionales. Sino el caso de ValiBot nunca entra
     // Aparentemente esto es porque instanceof toma en cuenta la herencia
     if (error.name === "ValiError") return { message: error.message, statusCode: 404 };
 
-    if (error instanceof Error) return { message: error.message, statusCode: 500 };
-
-    return { message: error.message, statusCode: error.statusCode as number };
+    return { message: error.message, statusCode: error.statusCode };
 }
 
 export class CustomError extends Error {
