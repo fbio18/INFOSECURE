@@ -239,3 +239,7 @@ main h2 {
     align-items: center;      
   }
 }
+
+#card-image{
+width: 40%;
+}
