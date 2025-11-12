@@ -1,6 +1,9 @@
 import NationalityRepository from "../repositories/nationality.repository";
 import UserRepository from "../repositories/user.repository";
 import { getCountries } from "@yusifaliyevpro/countries";
+import ProductRepository from "../repositories/product.repository";
+import RoleRepository from "../repositories/role.repository";
+import { ENVIRONMENT } from "../config";
 
 export async function preloadData() {
     try {
@@ -13,6 +16,8 @@ export async function preloadData() {
             ]);
         }
 
+        if (ENVIRONMENT !== "test") return;
+
         await UserRepository.save([
             {
                 username: "Nico",
@@ -22,8 +27,7 @@ export async function preloadData() {
             {
                 username: "BitsHunter",
                 email: "pabloHunter@gmail.com",
-                password: "holasoygay"
-            },
+                password: "chillimicateamo" },
             {
                 username: "ZackDaga",
                 email: "zackdaga@gmail.com",
@@ -35,8 +39,38 @@ export async function preloadData() {
                 password: "4khd7822"
             }
         ]);
-        console.log("Países cargados en bases de datos");
+
+        await ProductRepository.save([
+            {
+                name: "BitFort Antivirus",
+                price: 35000.00
+            }
+        ]);
+
+        await RoleRepository.save([
+            {
+                name: "Atención al cliente"
+            },
+            {
+                name: "Gerente de Recursos Humanos"
+            },
+            {
+                name: "Gerente de Producción"
+            },
+            {
+                name: "Gerente general"
+            },
+            {
+                name: "Programador"
+            },
+            {
+                name: "Personal de limpieza"
+            }
+        ])
+
+        console.log("Países, roles, usuarios y productos cargados con éxito");
     } catch (error) {
+        console.error(error);
         console.log("No se pudo cargar la lista de países en BD");
     }
 }
