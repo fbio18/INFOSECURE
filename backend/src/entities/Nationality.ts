@@ -9,6 +9,6 @@ export default class Nationality extends BaseEntity {
     @Column()
     name: string;
 
-    @OneToMany(() => Client, (client) => client.nationality)
+    @OneToMany(() => Client, (client) => client.nationality, { nullable: true })
     clients: Client[];
 }

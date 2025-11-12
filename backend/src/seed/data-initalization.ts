@@ -4,11 +4,12 @@ import { getCountries } from "@yusifaliyevpro/countries";
 import ProductRepository from "../repositories/product.repository";
 import RoleRepository from "../repositories/role.repository";
 import { ENVIRONMENT } from "../config";
+import { CustomError } from "../services/errorMessages";
 
 export async function preloadData() {
     try {
         const countries = await getCountries({ fields: ["name"]});
-        if (!countries) throw new Error();
+        if (!countries) throw new CustomError("La petición a la API de países falló", 500);
 
         for (const country of countries) {
             await NationalityRepository.save([
