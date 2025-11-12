@@ -10,7 +10,7 @@ export async function createUserController(req: Request, res: Response) {
         const newUser = await createUserService(req.body);
 
         console.log("User created");
-        res.send(newUser);
+        res.status(201).send(newUser);
     } catch (error) {
         console.error(error);
         const errorResponse = createErrorResponse(error);

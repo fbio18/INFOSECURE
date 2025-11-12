@@ -9,7 +9,7 @@ export async function createClientController(req: Request, res: Response) {
 
         const client = await createClientService(req.body);
 
-        res.send(client);
+        res.status(201).send(client);
     } catch (error) {
         console.error(error);
     }
