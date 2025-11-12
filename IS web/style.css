@@ -18,7 +18,11 @@ flex-direction: column;
 justify-content: space-between;
 align-items: center;
 overflow: hidden;
-
+align-items: center;
+  justify-content: center;
+    background: rgba(0,0,0,0.4);
+  padding: 1rem 2rem;
+  border-radius: 10px;
 }
 
 .banner--bitfort:hover{
@@ -39,8 +43,8 @@ overflow: hidden;
 @media (min-width:1300px){
   .banner--animation{
     flex-direction: row;
-    padding-right: 150px;
-    padding-bottom: 200px;
+    padding-right: 80px;
+    padding-bottom: 180px;
     padding-top: 100px;
   }
 }
@@ -61,13 +65,30 @@ overflow: hidden;
 
 .banner--info{
   width: 100%;
-  padding: 10px;
+ 
   display: flex;
   flex-direction: column;
   gap: 20px;
   text-align: center;
+ 
+  color: white;
+
+  padding: 120px 20px;
+  
+  
+}
+.banner--info h1 span {
+  color: #00c3ff; 
 }
 
+.banner--info p {
+  font-size: 1.25rem; 
+    
+  color: #e8f4ff;    
+  margin: 0 auto;
+  max-width: 800px;
+   font-family: inherit;
+}
 @media(min-width:800px){
   .banner--info{
     width: 45%;
@@ -78,7 +99,8 @@ overflow: hidden;
 .banner--info h1{
  color: aliceblue;
  font-weight: 900;
- font-size: 35px;
+ 
+ font-family: inherit;
 }
 
 .banner--animation{
@@ -86,8 +108,9 @@ overflow: hidden;
 
 }
 .banner--bitfort{
- 
+ width: 800px;
   filter: drop-shadow(0 5mm 25mm rgb(36, 138, 138));
+  align-items: center;
 }
 
 
@@ -96,16 +119,35 @@ overflow: hidden;
   filter: drop-shadow(0 5mm 5mm rgb(36, 138, 138));
 }
 
+@media (max-width: 500px) {
+  .banner--info {
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 5%;
+  }
 
+  .banner--info {
+    max-width: 90%;
+    text-align: center;
+  }
+
+  .banner--info h1 {
+    font-size: 2rem;
+  }
+
+  .banner--info p {
+    font-size: 1rem;
+  }
+}
 
 @media(min-width:500px){
   .banner--bitfort{
    
-    align-items: center;
+    
     padding-right: 50px;
     padding-top: 100px;
     padding-bottom: 100px;
-    width: 800px;
+    
   }
 }
 
@@ -128,12 +170,30 @@ overflow: hidden;
    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
    
  }
- #card-image{
-   
-    max-width: 80%;
-    padding-left: 5px;
-     margin-left: 30px;
- }
+ .card {
+  max-width: 320px;
+  margin: 0 auto;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  
+
+  height: 100%;
+
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body {
+  padding: 1rem;
+}
+ #card-image {
+  width: 60%;           
+  margin: 20px auto 0;  
+  display: block;
+  
+}
 
 .container
 {
@@ -148,18 +208,43 @@ overflow: hidden;
 }
 
 #cards{
-  max-width: 95%;
+ 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
  
 }
-
+#cards .card {
+ 
+  min-height: 380px; 
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 280px; 
+  margin: 0 auto;
+ 
+  
+  
+}
+#cards .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  
+}
+#cards .card-body {
+  text-align: center;
+  padding: 1rem;
+}
+#cards .card-text {
+  font-size: 0.9rem;
+}
 .description{
   margin-top: 30px;
 }
 
-#text{
-  padding-left: 90px;
-  padding-right: 90px;
-}
+
 
 #text{
   color: aliceblue;
@@ -228,20 +313,9 @@ text-align: center;
   }
 }
 
-#card
- {
-animation: appear linear;
-animation-timeline: view();
-animation-range: entry 0% cover 40%;
- }
 
- #card:hover{
 
-    transform: translateY(-10px);
-  
-    transition: 0.5s;
-}
-
+ 
  #nav
  {
    color: white;
