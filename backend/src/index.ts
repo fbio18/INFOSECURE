@@ -8,11 +8,11 @@ async function main(){
     try {
         await AppDataSource.initialize()
         await preloadData();
-        app.listen(PORT || 4000);
+        app.listen(PORT || 5000);
         console.log("Server up on port ", PORT);
     } catch (error) {
         console.error(error);
-        app.listen(PORT || 4000);
+        app.listen(PORT || 5000);
         console.log("Server up on port ", PORT);
     }
 }
