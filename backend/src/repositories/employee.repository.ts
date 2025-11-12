@@ -83,6 +83,20 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
 
         return { message: "El empleado fue borrado con éxito", statusCode: 200 };
     },
+
+    async unassignUserRelation(userId: number): Promise<void> {
+        const employee = await this
+        .createQueryBuilder("employee")
+        .leftJoinAndSelect("employee.user", "user")
+        .where("user.user_id = :userId", { userId })
+        .getOne();
+
+        await this
+        .createQueryBuilder()
+        .relation(Employee, "user")
+        .of(employee)
+        .set(null);
+    }
 })
 
 export default EmployeeRepository;
