@@ -148,6 +148,11 @@ const employeeSchema = v.object({
         v.number(messages.number),
         v.integer(messages.integer),
         v.minValue(1, messages.minIdValue)
+    ),
+    role: v.pipe(
+        v.number(messages.number),
+        v.integer(messages.integer),
+        v.minValue(1, messages.minIdValue)
     )
 });
 
