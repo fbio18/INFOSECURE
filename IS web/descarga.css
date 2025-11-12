@@ -10,22 +10,9 @@ body {
 }
 
 
-.header {
-  background-color: #0056d2;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-}
 
-.logo {
-  font-weight: 600;
-  font-size: 1.3rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+
+
 
 .country {
   display: flex;
@@ -39,6 +26,7 @@ body {
   justify-content: center;
   gap: 40px;
   padding: 40px;
+
   flex-wrap: wrap;
   flex: 1;
   padding-bottom: 100px;
@@ -146,7 +134,7 @@ input[type="email"]:focus {
 }
 #navbarNav
  {
-   background-color: #1e53a7;
+     background-color: #193666;
  }
 
  #nav
