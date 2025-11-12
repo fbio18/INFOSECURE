@@ -117,7 +117,14 @@ const CartRepository = AppDataSource.getRepository(Cart).extend({
 
         // Retorna el resultado así para ahorrarme guardarme el carrito en memoria
         return await this.readCart(cartId);
+    },
+
+    async createReplacementCart(cartId: number, clientId: number): Promise<void> {
+        await this.updateCart(cartId, { is_active: false });
+
+        await this.createCart({ client: clientId });
     }
+
 })
 
 export default CartRepository;

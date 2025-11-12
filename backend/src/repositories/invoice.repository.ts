@@ -27,6 +27,8 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
 
         if (!returnedInvoice) throw new Error();
 
+        await CartRepository.createReplacementCart(invoiceData.cartId, invoiceData.clientId);
+
         await this
         .createQueryBuilder()
         .relation(Invoice, "client")
