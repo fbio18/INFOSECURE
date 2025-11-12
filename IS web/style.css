@@ -172,13 +172,7 @@ overflow: hidden;
   max-width: 210px;
 text-align: center;
 }
-#contacto{
-  margin-left: 80px;
-}
-#sobrenosotros
-{
-  margin-left: 80px;
-}
+
 
 .btn--descargar {
   background-color: #0078d0;
@@ -246,11 +240,7 @@ animation-range: entry 0% cover 40%;
     transform: translateY(-10px);
   
     transition: 0.5s;
- }
- #navbarNav
- {
-   background-color: #1e53a7;
- }
+}
 
  #nav
  {
@@ -277,6 +267,10 @@ animation-range: entry 0% cover 40%;
  width: 100%;
 
  }
+ #logonav{
+
+    max-height: 60px;
+}
 
  @keyframes appear{
 from{
