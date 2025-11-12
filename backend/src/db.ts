@@ -9,6 +9,7 @@ import Invoice from "./entities/Invoice";
 import Role from "./entities/Role";
 import Nationality from "./entities/Nationality";
 import Employee from "./entities/Employee";
+import { ENVIRONMENT } from "./config";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -22,9 +23,9 @@ export const AppDataSource = new DataSource({
     port: (<number>DB_PORT),
     database: DB_NAME,
     entities: [User, Cart, Client, Product, Invoice, Role, Nationality, Employee, Item],
-    logging: true,
-    synchronize: true,
-    dropSchema: true
+    logging: ENVIRONMENT === "test",
+    synchronize: ENVIRONMENT === "test",
+    dropSchema: ENVIRONMENT === "test"
 });
 
 export default AppDataSource;
