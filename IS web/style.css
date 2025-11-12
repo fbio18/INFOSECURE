@@ -31,7 +31,7 @@ align-items: center;
 }
 
 
-@media (min-width:1300px){
+@media (min-width:1500px){
   .banner--bitfort{
    
   
@@ -40,7 +40,7 @@ align-items: center;
 }
 
 
-@media (min-width:1300px){
+@media (min-width:1500px){
   .banner--animation{
     flex-direction: row;
     padding-right: 80px;
@@ -57,7 +57,7 @@ align-items: center;
   }
 }
 
-@media (min-width:1300px){
+@media (min-width:1500px){
   .banner--content{
     flex-direction: row;
   }
