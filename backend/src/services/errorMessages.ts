@@ -41,7 +41,7 @@ export class InvalidId extends Error {
     constructor(public idType: "number" | "string" = "number", private _statusCode?: number) {
         super();
 
-        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, InvalidId);
 
         this.name = "InvalidId";
         this.message = `La id de tipo ${idType} utilizada no es válida`;
@@ -57,7 +57,7 @@ export class InvalidBody extends Error {
     constructor(private _statusCode?: number) {
         super();
 
-        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, InvalidBody);
 
         this.name = "InvalidBody";
         this.message = "El body está vacío o no cumple con los datos necesarios";
@@ -73,7 +73,7 @@ export class InvalidData extends Error {
     constructor(private _statusCode?: number) {
         super();
 
-        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, InvalidData);
 
         this.name = "InvalidData";
         this.message = "El formato de los datos es incorrecto";
@@ -89,10 +89,26 @@ export class MissingData extends Error {
     constructor(private _statusCode?: number) {
         super();
 
-        if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, MissingData);
 
         this.name = "MissingData";
         this.message = "Faltan uno o más campos";
+        this._statusCode = 400;
+    }
+
+    public get statusCode() {
+        return this._statusCode;
+    }
+}
+
+export class MissingQueryParameters extends Error {
+    constructor(private _statusCode?: number) {
+        super();
+
+        if (Error.captureStackTrace) Error.captureStackTrace(this, MissingQueryParameters);
+
+        this.name = "MissingQueryParameters";
+        this.message = "Faltan parámetros de query";
         this._statusCode = 400;
     }
 
