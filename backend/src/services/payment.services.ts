@@ -14,7 +14,7 @@ const client = new MercadoPagoConfig({ accessToken: MERCADOPAGO_ACCESS_TOKEN });
 export async function makePayment(cartId: number) {
     console.warn("Hijo mío has llegado a la luz")
 
-    await InvoiceRepository.createInvoice();
+    //await InvoiceRepository.createInvoice();
 }
 
 export async function createPreference(cartId: number): Promise<Partial<PreferenceResponse>> {

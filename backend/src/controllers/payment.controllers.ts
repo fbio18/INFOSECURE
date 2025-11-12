@@ -29,9 +29,9 @@ export async function successMessageController(req: Request, res: Response) {
         const user = (req.body as any).user;
         if (!user) throw new Error("not-found");
 
-        const orderDetail  = await makePayment()
+        //const orderDetail  = await makePayment()
 
-        res.status(201).send(orderDetail);
+        //res.status(201).send(orderDetail);
     } catch (error) {
         console.error(error);
         const errorResponse = createErrorResponse(error);
@@ -44,7 +44,7 @@ export function failureMessageController(req: Request, res: Response) {
         res.send("MAL AHÍ, PA. TE FALLÓ EL PAGO");
     } catch (error) {
         console.error(error);
-        const err = createErrorMessage(error as Error);
+        const err = createErrorResponse(error as Error);
         res.status(err.statusCode).send(err.message);
     }
 }
