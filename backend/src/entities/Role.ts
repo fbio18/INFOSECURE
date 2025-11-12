@@ -1,4 +1,5 @@
-import { Column, BaseEntity, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import Employee from "./Employee";
 
 @Entity()
 export default class Role extends BaseEntity {
@@ -7,4 +8,7 @@ export default class Role extends BaseEntity {
 
     @Column()
     name: string;
+
+    @ManyToMany(() => Employee, (employee) => employee.role, { nullable: true })
+    employee: Employee[];
 }

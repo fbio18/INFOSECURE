@@ -1,5 +1,6 @@
-import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from "typeorm";
+import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, ManyToMany, JoinColumn } from "typeorm";
 import User from "./User";
+import Role from "./Role";
 
 @Entity()
 export default class Employee extends BaseEntity {
@@ -17,6 +18,10 @@ export default class Employee extends BaseEntity {
 
     @Column()
     salary: number;
+
+    @ManyToMany(() => Role, (role) => role.employee)
+    @JoinColumn()
+    role: Role[];
 
     @CreateDateColumn()
     start_date: Date;
