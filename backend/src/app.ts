@@ -9,6 +9,7 @@ import employeeRouter from "./routes/employee.routes";
 import productRouter from "./routes/product.routes";
 import invoiceRouter from "./routes/invoice.routes";
 import cartRoutes from "./routes/cart.routes";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(authRoutes);
 app.use(userRouter);
 app.use(clientRouter);
 app.use(employeeRouter);
