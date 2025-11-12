@@ -31,7 +31,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
 
         if (!returnedEmployee) throw new Error();
 
-        assignEmployeeRelationService(employeeData.user, returnedEmployee.employee_id);
+        await assignEmployeeRelationService(employeeData.user, returnedEmployee.employee_id);
 
         return returnedEmployee;
     },
