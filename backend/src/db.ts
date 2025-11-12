@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_PORT, DB_NAME } from "./db-config";
+import { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_PORT, DB_NAME, DB_URL } from "./db-config";
 import User from "./entities/User";
 import Cart from "./entities/Cart";
 import Item from "./entities/Item";
@@ -13,7 +13,7 @@ import { ENVIRONMENT } from "./config";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    //url: DB_URL,
+    url: ENVIRONMENT === "test" ? "" : DB_URL,
     //ssl: {
     //rejectUnauthorized: false,
     //},
