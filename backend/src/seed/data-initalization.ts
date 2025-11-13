@@ -5,6 +5,7 @@ import ProductRepository from "../repositories/product.repository";
 import RoleRepository from "../repositories/role.repository";
 import { ENVIRONMENT } from "../config";
 import { CustomError } from "../services/errorMessages";
+import EmployeeRepository from "../repositories/employee.repository";
 
 export async function preloadData() {
     try {
@@ -68,6 +69,51 @@ export async function preloadData() {
                 name: "Personal de limpieza"
             }
         ])
+
+
+        await EmployeeRepository.createEmployee(
+            {
+                dni: "35192380",
+                surnames: "De la Cruz",
+                names: "Ernesto Vicente",
+                salary: 750520,
+                user: 1,
+                role: 1,
+            }
+        )
+
+        await EmployeeRepository.createEmployee(
+            {
+                dni: "40291283",
+                surnames: "Gómez Mendez",
+                names: "Daniel",
+                salary: 619201,
+                user: 2,
+                role: 2,
+            }
+        )
+
+        await EmployeeRepository.createEmployee(
+            {
+                dni: "38190240",
+                surnames: "Fernandez",
+                names: "Celia Fernanda",
+                salary: 1000010,
+                user: 3,
+                role: 3,
+            }
+        )
+
+        await EmployeeRepository.createEmployee(
+            {
+                dni: "28012756",
+                surnames: "Güemes Benavidez",
+                names: "Pedro Baltazar",
+                salary: 900192.00,
+                user: 4,
+                role: 4,
+            }
+        )
 
         console.log("Países, roles, usuarios y productos cargados con éxito");
     } catch (error) {
