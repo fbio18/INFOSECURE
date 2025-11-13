@@ -24,7 +24,7 @@ export const AppDataSource = new DataSource({
     database: DB_NAME,
     entities: [User, Cart, Client, Product, Invoice, Role, Nationality, Employee, Item],
     logging: ENVIRONMENT === "test",
-    synchronize: ENVIRONMENT !== "test",
+    synchronize: true,
     dropSchema: ENVIRONMENT === "test"
 });
 
