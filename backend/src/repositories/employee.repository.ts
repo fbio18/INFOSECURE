@@ -1,6 +1,7 @@
 import AppDataSource from "../db";
 import Employee from "../entities/Employee";
 import { NotFound } from "../services/errorMessages";
+import { employeeFilter } from "../services/filters-validation";
 import { assignEmployeeRelationService, readUserService } from "../services/user.services";
 import { EmployeeValidated } from "../services/validation";
 import UserRepository from "./user.repository";
@@ -33,6 +34,12 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
 
         await assignEmployeeRelationService(employeeData.user, returnedEmployee.employee_id);
 
+        await this
+        .createQueryBuilder()
+        .relation(Employee, "role")
+        .of(returnedEmployee)
+        .add(employeeData.role);
+
         return returnedEmployee;
     },
 
@@ -40,6 +47,7 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
         const employee = await this
         .createQueryBuilder("employee")
         .leftJoinAndSelect("employee.user", "user")
+        .leftJoinAndSelect("employee.role", "role")
         .where("employee.employee_id = :employeeId", { employeeId })
         .getOne();
 
@@ -52,8 +60,47 @@ const EmployeeRepository = AppDataSource.getRepository(Employee).extend({
         const employees = await this
         .createQueryBuilder("employee")
         .leftJoinAndSelect("employee.user", "user")
+        .leftJoinAndSelect("employee.role", "role")
         .getMany();
 
+        if (!employees) throw new NotFound("employee");
+
+        return employees;
+    },
+
+    async readEmployeesByFilter(employeeFilters: employeeFilter): Promise<Employee[]> {
+        const query = this
+        .createQueryBuilder("employee")
+        .leftJoinAndSelect("employee.role", "role")
+        .leftJoinAndSelect("employee.user", "user")
+        .where("employee.is_working = :employeeIsWorking", { employeeIsWorking: true })
+
+        if (employeeFilters.minSalary) query.andWhere("employee.salary >= :minSalary", { minSalary: employeeFilters.minSalary });
+
+        if (employeeFilters.maxSalary) query.andWhere("employee.salary <= :maxSalary", { maxSalary: employeeFilters.maxSalary });
+
+        if (employeeFilters.role) query.andWhere("role.role_id = :employeeRole", { employeeRole: employeeFilters.role });
+
+        if (employeeFilters.minYearsWorking || employeeFilters.maxYearsWorking) {
+            const currentDate = new Date();
+
+            if (employeeFilters.minYearsWorking) {
+                const minFilteredDate = new Date(currentDate);
+                minFilteredDate.setFullYear(minFilteredDate.getFullYear() - employeeFilters.minYearsWorking);
+
+                query.andWhere("employee.start_date <= :minFilteredDate", { minFilteredDate });
+            }
+
+            if (employeeFilters.maxYearsWorking) {
+                const maxFilteredDate = new Date(currentDate);
+                maxFilteredDate.setFullYear(maxFilteredDate.getFullYear() - employeeFilters.maxYearsWorking);
+                query.andWhere("employee.start_date >= :maxFilteredDate", { maxFilteredDate });
+            }
+        }
+
+        if (employeeFilters.is_in_license) query.andWhere("employee.is_active = :employeeIsInLicence", { employeeIsInLicence: employeeFilters.is_in_license });
+
+        const employees = await query.getMany();
         if (!employees) throw new NotFound("employee");
 
         return employees;

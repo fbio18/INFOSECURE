@@ -1,4 +1,4 @@
-import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, ManyToMany, JoinColumn } from "typeorm";
+import { Column, BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, ManyToMany, JoinTable } from "typeorm";
 import User from "./User";
 import Role from "./Role";
 
@@ -19,16 +19,22 @@ export default class Employee extends BaseEntity {
     @Column()
     salary: number;
 
-    @ManyToMany(() => Role, (role) => role.employee)
-    @JoinColumn()
-    role: Role[];
-
     @CreateDateColumn()
     start_date: Date;
+
+    @Column({ nullable: true })
+    leave_date: Date;
 
     @Column({ default: false })
     is_in_license: boolean;
 
+    @Column({ default: true })
+    is_working: boolean;
+
     @OneToOne(() => User, (user) => user.employee)
     user: User;
+
+    @ManyToMany(() => Role, (role) => role.employee)
+    @JoinTable()
+    role: Role[];
 }
