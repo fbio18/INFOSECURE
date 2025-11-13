@@ -1,6 +1,7 @@
 import Invoice from "../entities/Invoice";
 import InvoiceRepository from "../repositories/invoice.repository";
 import { InvalidData, InvalidId } from "./errorMessages";
+import { invoiceFilter, validateInvoiceFilters } from "./filters-validation";
 import { validateUpdateInvoiceData } from "./update-validation";
 import { validateInvoiceData, validateNumberId } from "./validation";
 
@@ -18,6 +19,12 @@ export async function readInvoiceService(invoiceId: number): Promise<Invoice> {
 
 export async function readAllInvoicesService(): Promise<Invoice[]> {
     return await InvoiceRepository.readAllInvoices();
+}
+
+export async function readInvoicesByFilterService(invoiceFilters: invoiceFilter): Promise<Invoice[]> {
+    if (!validateInvoiceFilters(invoiceFilters)) throw new InvalidData();
+
+    return InvoiceRepository.readByFilters(invoiceFilters);
 }
 
 export async function updateInvoiceService(invoiceId: number, updatedInvoiceData: Partial<Invoice>): Promise<Invoice> {

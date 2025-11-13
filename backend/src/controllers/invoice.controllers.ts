@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateBody } from "../services/validation";
 import { createErrorResponse, InvalidBody, MissingData } from "../services/errorMessages";
-import { createInvoiceService, readAllInvoicesService, readInvoiceService, updateInvoiceService } from "../services/invoice.services";
+import { createInvoiceService, readAllInvoicesService, readInvoicesByFilterService, readInvoiceService, updateInvoiceService } from "../services/invoice.services";
 
 export async function createInvoiceController(req: Request, res: Response) {
     try {
@@ -34,6 +34,20 @@ export async function readInvoiceController(req: Request, res: Response) {
 export async function readAllInvoicesController(req: Request, res: Response) {
     try {
         const invoices = await readAllInvoicesService();
+
+        res.send(invoices);
+    } catch (error) {
+        console.error(error);
+        const errorResponse = createErrorResponse(error);
+        res.status(errorResponse.statusCode).send(errorResponse);
+    }
+}
+
+export async function readInvoicesByFilterController(req: Request, res: Response) {
+    try {
+        if (!validateBody(req.body)) throw new InvalidBody();
+
+        const invoices = await readInvoicesByFilterService(req.body);
 
         res.send(invoices);
     } catch (error) {

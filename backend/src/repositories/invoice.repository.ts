@@ -2,6 +2,7 @@ import AppDataSource from "../db";
 import Invoice, { TInvoice_type } from "../entities/Invoice";
 import { readClientService } from "../services/client.services";
 import { NotFound } from "../services/errorMessages";
+import { invoiceFilter } from "../services/filters-validation";
 import { InvoiceValidated } from "../services/validation";
 import CartRepository from "./cart.repository";
 import ClientRepository from "./client.repository";
@@ -79,6 +80,28 @@ const InvoiceRepository = AppDataSource.getRepository(Invoice).extend({
         .where("client.client_id = :clientId", { clientId })
         .getMany();
 
+        if (!invoices) throw new NotFound("invoice");
+
+        return invoices;
+    },
+
+    async readByFilters(invoiceFilters: invoiceFilter): Promise<Invoice[]> {
+        const query = this
+        .createQueryBuilder("invoice")
+        .leftJoinAndSelect("invoice.client", "client")
+        .leftJoinAndSelect("client.nationality", "nationality")
+
+        if (invoiceFilters.clientName) query.andWhere("client.business_name = :clientName", { clientName: invoiceFilters.clientName });
+
+        if (invoiceFilters.emissionDate) query.andWhere("invoice.emission_date = :invoiceEmissionDate", { invoiceEmissionDate: invoiceFilters.emissionDate});
+
+        if (invoiceFilters.invoice_type) query.andWhere("invoice.invoice_type = :invoiceInvoiceType", { invoiceInvoiceType: invoiceFilters.invoice_type });
+
+        if (invoiceFilters.nationality) query.andWhere("nationality.nationality_id = :countryId", { countryId: invoiceFilters.nationality });
+
+        if (invoiceFilters.total) query.andWhere("invoice.total_amount = :total", { total: invoiceFilters.total });
+
+        const invoices = await query.getMany();
         if (!invoices) throw new NotFound("invoice");
 
         return invoices;
