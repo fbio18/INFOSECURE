@@ -185,10 +185,6 @@ export function validateInvoiceType(receptorType: string): boolean {
 }
 
 const invoiceSchema = v.object({
-    emitter: v.pipe(
-        v.string(messages.string),
-        v.nonEmpty(messages.nonEmpty),
-    ),
     clientId: v.pipe(
         v.number(messages.number),
         v.integer(messages.integer),
