@@ -3,6 +3,8 @@ export function createErrorResponse(error: any): { message: string, statusCode: 
     // Aparentemente esto es porque instanceof toma en cuenta la herencia
     if (error.name === "ValiError") return { message: error.message, statusCode: 404 };
 
+    if (!error.statusCode) return { message: error.message, statusCode: 500 };
+
     return { message: error.message, statusCode: error.statusCode };
 }
 
