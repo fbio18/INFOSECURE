@@ -30,7 +30,7 @@ export class NotFound extends Error {
         if (Error.captureStackTrace) Error.captureStackTrace(this, NotFound);
 
         this.name = "NotFound"
-        this.message = `El dato ${entity} no fue encontrado`;
+        this.message = `El/los dato/s ${entity} no fue encontrado`;
         this._statusCode = 404;
     }
 
