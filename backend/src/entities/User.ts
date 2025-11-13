@@ -22,7 +22,7 @@ export default class User extends BaseEntity {
     @Column({ default: 0 })
     last_time_spend_on_page: number;
 
-    @OneToOne(() => Employee)
+    @OneToOne(() => Employee, (employee) => employee.user)
     @JoinColumn()
     employee: Employee;
 
