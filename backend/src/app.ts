@@ -11,11 +11,15 @@ import invoiceRouter from "./routes/invoice.routes";
 import cartRoutes from "./routes/cart.routes";
 import authRoutes from "./routes/auth.routes";
 import paymentRoutes from "./routes/payment.routes";
+import { ENVIRONMENT } from "./config";
 
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:5555", "http://127.0.0.1:5555"],
+    credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 

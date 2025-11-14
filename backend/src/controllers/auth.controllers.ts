@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { validateBody } from "../services/validation";
 import { createErrorResponse, InvalidBody } from "../services/errorMessages";
 import { loginService } from "../services/auth.services";
+import { ENVIRONMENT } from "../config";
 
 export async function loginController(req: Request, res: Response) {
     try {
@@ -13,11 +14,12 @@ export async function loginController(req: Request, res: Response) {
                    userValidationResponse.token,
                    {
                        httpOnly: true,
-                       secure: false,
-                       sameSite: "strict",
+                       //secure: ENVIRONMENT !== "test",
+                       secure: true,
+                       sameSite: ENVIRONMENT === "test" ? "none" : "strict",
                        maxAge: 1000 * 60 * 60 * 24
                    })
-                   .send({ token: userValidationResponse.token, user: userValidationResponse.user });
+                   .send({ user: userValidationResponse.user });
     } catch (error) {
         console.log(error);
         const errorResponse = createErrorResponse(error);
