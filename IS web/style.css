@@ -31,13 +31,7 @@ align-items: center;
 }
 
 
-@media (min-width:1500px){
-  .banner--bitfort{
-   
-  
-    width: 850px;
-  }
-}
+
 
 
 @media (min-width:1500px){
@@ -107,23 +101,15 @@ align-items: center;
   position: relative;
 
 }
-.banner--bitfort{
- width: 800px;
-  filter: drop-shadow(0 5mm 25mm rgb(36, 138, 138));
-  align-items: center;
-}
 
 
-#cards{
-   
-  filter: drop-shadow(0 5mm 5mm rgb(36, 138, 138));
-}
+
 
 @media (max-width: 500px) {
   .banner--info {
     flex-direction: column;
-    text-align: center;
-    padding: 3rem 5%;
+    
+    padding: 1rem ;
   }
 
   .banner--info {
@@ -140,16 +126,6 @@ align-items: center;
   }
 }
 
-@media(min-width:500px){
-  .banner--bitfort{
-   
-    
-    padding-right: 50px;
-    padding-top: 100px;
-    padding-bottom: 100px;
-    
-  }
-}
 
 @media(min-width:500px){
   .banner--info{
@@ -181,20 +157,10 @@ align-items: center;
 
 }
 
-.card:hover {
-  transform: translateY(-5px);
-}
 
-.card-body {
-  padding: 1rem;
-}
- #card-image {
-  width: 60%;           
-  margin: 20px auto 0;  
-  display: block;
-  
-}
 
+
+ 
 .container
 {
     padding-bottom: 50px;
@@ -207,39 +173,10 @@ align-items: center;
   padding-left: 70px;
 }
 
-#cards{
- 
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
- 
-}
-#cards .card {
- 
-  min-height: 380px; 
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 100%;
-  max-width: 280px; 
-  margin: 0 auto;
- 
-  
-  
-}
-#cards .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  
-}
-#cards .card-body {
-  text-align: center;
-  padding: 1rem;
-}
-#cards .card-text {
-  font-size: 0.9rem;
-}
+
+
+
+
 .description{
   margin-top: 30px;
 }
@@ -468,5 +405,61 @@ scale: 1;
 @media (max-width: 768px) {
   .footer-left {
     align-items: center;      
+  }
+}
+
+ .card {
+  width: 100%;
+  max-width: 280px; 
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+
+#card-image {
+  width: 60%; 
+  margin: 20px auto 0;
+  display: block;
+}
+
+ .card-body {
+  
+  padding: 1rem;
+}
+
+ .card-text {
+  font-size: 0.9rem;
+}
+
+
+.card {
+  max-width: 320px;
+  margin: 0 auto;
+  border-radius: 12px;
+ filter: drop-shadow(0 5mm 5mm rgb(36, 138, 138));
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.banner--bitfort {
+  width: 50vw; 
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .banner--bitfort {
+    width: 80vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .banner--bitfort {
+    width: 40vw;
   }
 }
