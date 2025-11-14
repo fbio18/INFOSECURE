@@ -57,6 +57,12 @@ const userSchema = v.object({
     username: v.pipe(
         v.string(messages.string),
         v.nonEmpty(messages.nonEmpty),
+    ),
+    role: v.nullish(
+        v.pipe(
+            v.string(messages.string),
+            v.nonEmpty(messages.nonEmpty),
+        )
     )
 });
 
