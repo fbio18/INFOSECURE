@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ventas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+
+
+
+  <nav class="navbar navbar-expand-sm " id="navbarNav"  >
+    <div class="container-fluid">
+     <nav class="navbar "  >
+    <div class="container-fluid" >
+      <a class="navbar-brand" href="#" id="text">
+        <img src="logo-ISblanco-removebg-preview.png"alt="Logo"  class="img-fluid" id="logonav" >
+        InfoSecure
+      </a>
+    </div>
+  </nav>
+  
+      <a class="navbar-brand" href="#" ></a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse"  >
+        <ul class="navbar-nav ms-auto" >
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="nav">Inicio</a>
+          </li>
+         
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+   <main>
+    <h1>Ventas de InfoSecure</h1>
+
+    
+    <div class="filtros">
+      <input type="date" id="filtro-fecha" />
+      <input type="text" id="filtro-cliente" placeholder="Nombre del cliente" />
+      <select id="filtro-pais">
+        <option value="">Todos los países</option>
+        <option>Argentina</option>
+        <option>Chile</option>
+        <option>Perú</option>
+        <option>Uruguay</option>
+      </select>
+      <select id="filtro-tipo">
+        <option value="">Todos los tipos</option>
+        <option>Persona Física</option>
+        <option>Empresa</option>
+      </select>
+      <button id="btn-filtrar">Filtrar</button>
+    </div>
+
+    
+    <div class="tabla-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Fecha</th>
+            <th>País</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Monto (USD)</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-ventas"></tbody>
+      </table>
+    </div>
+  </main>
+
+
+
+
+
+  <footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <div class="footer-brand">
+        <img src="logo-ISblanco chiquito.png" alt="Logo InfoSecure" class="footer-logo" />
+        <h3>InfoSecure</h3>
+      </div>
+      <p>© 2025 InfoSecure S.A.S. Todos los derechos reservados.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#about">Sobre nosotros</a>
+    
+      <a href="#contact">Contacto</a>
+      <a href="#privacy">Política de privacidad</a>
+    </div>
+
+    <div class="footer-socials">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="script.js"></script>
+</body>
+
+
+
+</html>
