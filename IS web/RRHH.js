@@ -1,10 +1,10 @@
-// URL del backend (cuando tu amigo la tenga, solo reemplazala)
+
 const API_URL = "http://localhost:3000/api/empleados"; 
 
-// Cargar los datos al iniciar
+
 axios.get(API_URL)
   .then(response => {
-    const empleados = response.data; // datos que vienen del back
+    const empleados = response.data; 
     mostrarEmpleados(empleados);
 
     document.getElementById("filtrar").addEventListener("click", () => {
@@ -18,9 +18,8 @@ axios.get(API_URL)
   });
 
 
-// ========================= FUNCIONES =========================
 
-// Mostrar empleados en la tabla
+
 function mostrarEmpleados(lista) {
   const tabla = document.getElementById("tablaEmpleados");
   tabla.innerHTML = "";
@@ -46,7 +45,7 @@ function mostrarEmpleados(lista) {
 }
 
 
-// Filtrar empleados según los campos del usuario
+
 function filtrarEmpleados(data) {
   const rol = document.getElementById("rol").value;
   const salMin = parseInt(document.getElementById("salarioMin").value) || 0;
@@ -56,11 +55,7 @@ function filtrarEmpleados(data) {
   const activo = document.getElementById("activo").checked;
   const licencia = document.getElementById("licencia").checked;
 
-  // Si querés que el filtro se haga en el back:
-  // axios.get(`${API_URL}?rol=${rol}&salMin=${salMin}&salMax=${salMax}...`)
-  // (cuando tu amigo tenga el endpoint armado)
-
-  // Por ahora filtramos en el front:
+  
   const filtrado = data.filter(emp => {
     const cumpleRol = !rol || emp.rol === rol;
     const cumpleSalario = emp.salario >= salMin && emp.salario <= salMax;

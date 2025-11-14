@@ -1,4 +1,4 @@
-// Espera a que cargue todo el contenido
+
 document.addEventListener("DOMContentLoaded", function () {
     const formulario = document.getElementById("formRegistro");
 
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function registrarUsuario(datosRegistro) {
-    //const userCreationUrl = "https://infosecure-sas.onrender.com/user";
+    
     const userCreationUrl = "http://localhost:4000/user";
 
     const response = await axios.post(userCreationUrl, datosRegistro, { withCredentials: true });
