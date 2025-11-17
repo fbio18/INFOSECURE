@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="confirmacion.css">
+</head>
+<body>
+    <div class="overlay" role="dialog" aria-modal="true">
+<div class="card" aria-labelledby="title">
+<button class="close" aria-label="Cerrar" id="closeBtn">✕</button>
+
+
+<div class="layout">
+<div class="illustration" aria-hidden="true">
+
+<svg width="72" height="56" viewBox="0 0 72 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="6" width="72" height="44" rx="6" fill="white"/>
+<path d="M2 8l34 22L70 8" stroke="#1370d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="8" y="14" width="56" height="26" rx="3" fill="#eaf6ff"/>
+<path d="M8 18h56" stroke="#55a6ff" stroke-width="2"/>
+</svg>
+</div>
+
+
+<div class="text">
+<h1 id="title">Confirmación de correo electrónico</h1>
+
+
+<p class="lead">
+Hemos enviado un correo a <span class="email">usuario@ejemplo.com</span> para confirmar tu cuenta.
+Revisá tu bandeja de entrada y seguí el enlace para completar el registro.
+</p>
+
+
+<div class="divider"></div>
+
+
+<p class="resend">
+¿No recibiste el mail?
+<a href="#" id="resendEmail">Reenviar correo de confirmación</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script src="confirmacion.js"></script>
+</body>
+</html>

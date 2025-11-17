@@ -1,0 +1,12 @@
+ body {
+     background: linear-gradient(to top, rgb(94, 222, 226),  #193666);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
