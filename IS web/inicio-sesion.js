@@ -14,12 +14,7 @@ formulario.addEventListener("submit", (e) => {
 async function iniciarSesion(datosInicioSesion) {
     const urlInicioSesion = "http://localhost:4000/login";
 
-    const response = await axios.post(urlInicioSesion, datosInicioSesion, { withCredentials: true });
-
-    console.log(response);
-
-    sessionStorage.setItem("sesionIniciada", "true");
-    sessionStorage.setItem("userRole", response.data.user.role);
+    const response = await axios.post(urlInicioSesion, datosInicioSesion);
 
     window.location = "http://localhost:5555";
 }
