@@ -3,6 +3,7 @@ import User from "../entities/User";
 import { readClientService } from "../services/client.services";
 import { readEmployeeService } from "../services/employee.services";
 import { NotFound } from "../services/errorMessages";
+import { sendConfirmationEmail } from "../services/nodemailer.services";
 import { UserValidated } from "../services/validation";
 import ClientRepository from "./client.repository";
 import EmployeeRepository from "./employee.repository";
@@ -24,6 +25,8 @@ const UserRepository = AppDataSource.getRepository(User).extend({
         .createQueryBuilder("user")
         .orderBy("user_id", "DESC")
         .getOne();
+
+        await sendConfirmationEmail(userData.email);
 
         if (!returnedUser) throw new NotFound("user");
 

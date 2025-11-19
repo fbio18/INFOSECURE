@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -17,9 +17,16 @@ const app = express();
 
 app.use(morgan("dev"));
 app.use(cors({
-    origin: ["http://localhost:5555", "http://127.0.0.1:5555"],
+    origin: "*",
     credentials: true
 }));
+//app.options("*", cors());
+//app.use((req: Request, res: Response, next: NextFunction) => {
+//    res.append("Access-Control-Allow-Origin", ["*"]);
+//    res.append("Access-Control-Allow-Methods", "GET, POST, HEAD, PUT, DELETE");
+//
+//    next();
+//})
 app.use(express.json());
 app.use(cookieParser());
 

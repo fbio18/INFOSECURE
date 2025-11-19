@@ -13,8 +13,11 @@ export default class User extends BaseEntity {
     @Column({ default: "user" })
     role: string;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
+
+    @Column({ default: false })
+    hasVerifiedEmail: boolean;
 
     @Column({ select: false })
     password: string;

@@ -28,7 +28,8 @@ async function registrarUsuario(datosRegistro) {
     //const userCreationUrl = "https://infosecure-sas.onrender.com/user";
     const userCreationUrl = "http://localhost:4000/user";
 
-    const response = await axios.post(userCreationUrl, datosRegistro, { withCredentials: true });
+    const response = await axios.post(userCreationUrl, datosRegistro);
 
-    window.location = "http://localhost:5555/inicio-sesion.html";
+    console.log(response);
+    window.location = "http://localhost:5555/confirmar-email.html";
 }

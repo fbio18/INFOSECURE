@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { CustomError, MissingData } from "./errorMessages";
+import { CustomError, InvalidId, MissingData } from "./errorMessages";
 import UserRepository from "../repositories/user.repository";
 import User from "../entities/User";
 import { JWT_SECRET } from "../config";
+import { validateNumberId } from "./validation";
 
 export async function loginService(user: Partial<User>): Promise<{ token: string, user: Partial<User> }> {
     if (!user.email) throw new MissingData();
@@ -21,4 +22,14 @@ export async function loginService(user: Partial<User>): Promise<{ token: string
     );
 
     return { token: token, user: userToLogin };
+}
+
+export async function confirmEmailService(userId: number, emailIsVerified: { hasEmailVerified: boolean }): Promise<{ verified: boolean }> {
+    if (!validateNumberId(userId)) throw new InvalidId();
+    if (!emailIsVerified) throw new MissingData();
+    if (emailIsVerified.hasEmailVerified === false) throw new CustomError("No se puede asignar un valor de false a la verificación del mail", 401);
+
+    await UserRepository.updateUser(userId, { hasVerifiedEmail: emailIsVerified.hasEmailVerified });
+
+    return { verified: true };
 }
