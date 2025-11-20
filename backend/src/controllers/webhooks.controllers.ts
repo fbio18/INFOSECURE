@@ -10,6 +10,8 @@ export async function getNotification(req: Request, res: Response) {
         console.log(req.body);
         console.log(req.params);
         console.log(req.query);
+
+        res.send({ message: "Hola pude completarme" });
     } catch (error) {
         console.error(error);
     }
