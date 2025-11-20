@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
+import { validateBody } from "../services/validation";
+import { InvalidBody } from "../services/errorMessages";
 
 export async function getNotification(req: Request, res: Response) {
     try {
+        if (!validateBody(req.body)) throw new InvalidBody();
+
         console.log("LA NOTIFICACION LLEGO A GET")
         console.log(req.body);
         console.log(req.params);
