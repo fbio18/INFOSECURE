@@ -5,3 +5,5 @@ const router = Router();
 
 router.post("/notifications", getNotification);
 router.get("/notifications", postNotification);
+
+export default router;

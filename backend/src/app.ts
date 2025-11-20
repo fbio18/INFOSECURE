@@ -11,6 +11,7 @@ import invoiceRouter from "./routes/invoice.routes";
 import cartRoutes from "./routes/cart.routes";
 import authRoutes from "./routes/auth.routes";
 import paymentRoutes from "./routes/payment.routes";
+import webhookRoutes from "./routes/webhook.routes";
 import { ENVIRONMENT } from "./config";
 
 const app = express();
@@ -38,5 +39,6 @@ app.use(employeeRouter);
 app.use(productRouter);
 app.use(invoiceRouter);
 app.use(cartRoutes);
+app.use(webhookRoutes);
 
 export default app;
