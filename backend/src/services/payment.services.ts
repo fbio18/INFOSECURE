@@ -36,6 +36,7 @@ export async function createPreference(cartId: number): Promise<Partial<Preferen
 
     const result = await preference.create({
         body: {
+            notification_url: "https://infosecure-sas.onrender.com",
             items: mercadoPagoItems,
             back_urls: {
                 success: "127.0.0.1:4000/success",
